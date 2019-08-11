@@ -1,6 +1,15 @@
+## Acknowledgements
+This JavaScript library is based on parts of the Processing/Java code https://github.com/archmoj/grib2_solarchvision
+and made available by members from the [Plotly.js](https://github.com/plotly/plotly.js) team titled [meteo.io](https://www.hackworks.com/en/meteohack/teams/meteoio) during [METEOHACK](https://www.hackworks.com/en/meteohack) event hosted by the Meteorological Service of Canada (MSC)
+which is part of Environment and Climate Change Canada (ECCC), 2019, Montréal, Québec, Canada.
+
+## Programming languages
+JavaScript and node.js
+
+## Licence
 MIT License
 
-Copyright (c) 2019 Mojtaba Samimi
+Copyright (c) 2019 [Mojtaba Samimi](https://twitter.com/solarchvision)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
