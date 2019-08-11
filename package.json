@@ -1,0 +1,29 @@
+{
+  "name": "grib2class",
+  "version": "1.0.0",
+  "description": "grib2 reader in pure JavaScript",
+  "main": "grib2class.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archmoj/grib2class.git"
+  },
+  "keywords": [
+    "grib2",
+    "open",
+    "data",
+    "visualization",
+    "solarchvision",
+    "post-processing",
+    "javascript",
+    "node.js"
+  ],
+  "author": "Mojtaba Samimi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/archmoj/grib2class/issues"
+  },
+  "homepage": "https://github.com/archmoj/grib2class#readme"
+}
