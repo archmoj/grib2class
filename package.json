@@ -1,6 +1,6 @@
 {
   "name": "grib2class",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "grib2 reader in pure JavaScript",
   "main": "grib2class.js",
   "scripts": {
