@@ -1688,8 +1688,9 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
         var t;
 
-        t = -t3;
         var tmpX, tmpY, tmpZ;
+
+        t = -t3;
         {
             tmpX = x * cosDeg(t) - y * sinDeg(t);
             tmpY = y * cosDeg(t) + x * sinDeg(t);
@@ -1845,6 +1846,222 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
         if (this.TypeOfProjection === 30) { // Lambert Conformal Projection
             return this._toLambertConformal(ix, iy);
+        }
+
+        return [undefined, undefined];
+    };
+
+    this._fromLongitudeLatitude = function (lon, lat) {
+        var ix, iy;
+
+        var lat1 = this.La1;
+        var lon1 = this.Lo1;
+
+        var lat2 = this.La2;
+        var lon2 = this.Lo2;
+
+        // to work with something like GEPS
+        if (lon2 > 180) {
+            if (lon < 0) lon += 360;
+        }
+
+        ix = (lon - lon1) * this.Nx / (lon2 - lon1);
+        iy = (lat - lat1) * this.Ny / (lat2 - lat1);
+
+        return [ix, iy];
+    };
+
+    this._fromRotatedLongitudeLatitude = function (lon, lat) {
+        var ix, iy;
+
+        var lat1 = this.La1;
+        var lon1 = this.Lo1;
+
+        var lat2 = this.La2;
+        var lon2 = this.Lo2;
+
+        var t1 = this.SouthLon;
+        var t2 = -this.SouthLat - 90;
+        var t3 = this.Rotation - 90;
+
+        var x = cosDeg(lat) * cosDeg(lon);
+        var y = cosDeg(lat) * sinDeg(lon);
+        var z = sinDeg(lat);
+
+        var t;
+
+        var tmpX, tmpY, tmpZ;
+
+        t = t1;
+        {
+            tmpX = x * cosDeg(t) - y * sinDeg(t);
+            tmpY = y * cosDeg(t) + x * sinDeg(t);
+            tmpZ = z;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
+        }
+
+        t = t2;
+        {
+            tmpY = y * cosDeg(t) - z * sinDeg(t);
+            tmpZ = z * cosDeg(t) + y * sinDeg(t);
+            tmpX = x;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
+        }
+
+        t = t3;
+        {
+            tmpX = x * cosDeg(t) - y * sinDeg(t);
+            tmpY = y * cosDeg(t) + x * sinDeg(t);
+            tmpZ = z;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
+        }
+
+        lat = asinDeg(z);
+        lon = atan2Deg(y, x);
+
+        if (lon < lon1) lon += 360;
+        else if (lon > lon2) lon -= 360;
+
+        ix = (lon - lon1) * this.Nx / (lon2 - lon1);
+        iy = (lat - lat1) * this.Ny / (lat2 - lat1);
+
+        return [ix, iy];
+    };
+
+    this._fromPolarStereographic = function (lon, lat) {
+        var ix, iy;
+
+
+        var Lat1 = this.La1;
+        var Lon1 = this.Lo1;
+
+        var LatD = this.LaD;
+        var LonV = this.LoV;
+
+        var h = 1.0;
+        if (this.PCF !== 0) {
+            h = -1.0;
+            LonV -= 180;
+        }
+
+        var dx = this.Dx;
+        var dy = this.Dy;
+
+        if (this.ScanX === 0) dx = -dx;
+        if (this.ScanY === 0) dy = -dy;
+
+        var de = (1.0 + sinDeg(Math.abs(LatD))) * rEarthKm;
+        var dr = de * cosDeg(Lat1) / (1 + h * sinDeg(Lat1));
+
+        var xp = -h * (sinDeg(Lon1 - LonV)) * dr / dx;
+        var yp = (cosDeg(Lon1 - LonV)) * dr / dy;
+
+        var de2 = de * de;
+
+        var M = sinDeg(lat / h);
+        var dr2 = de2 * (1 - M) / (1 + M);
+
+        var N = tanDeg((lon - LonV) / h);
+        var dj = -Math.pow(dr2 / (N * N + 1), 0.5);
+
+        var LonQ = (lon + 180) % 360;
+
+        if ((LonQ - LonV > -90) && (LonQ - LonV < 90)) dj *= -1;
+
+        var di = N * (-dj);
+
+        ix = (di / dx) + xp;
+        iy = -((dj / dy) + yp);
+
+        return [ix, iy];
+    };
+
+    this._fromLambertConformal = function (lon, lat) {
+        var ix, iy;
+
+
+        var Lat1 = this.La1;
+        var Lon1 = this.Lo1;
+
+        var LatD = this.LaD;
+        var LonV = this.LoV;
+
+        var dx = this.Dx;
+        var dy = this.Dy;
+
+        if (this.ScanX === 0) dx = -dx;
+        if (this.ScanY === 0) dy = -dy;
+
+        // var h = 1.0;
+        if (this.PCF !== 0) {
+            // h = -1.0;
+            LonV -= 180;
+        }
+
+        var latin1r = this.FirstLatIn;
+        var latin2r = this.SecondLatIn;
+
+        var n = 0;
+        if (Math.abs(latin1r - latin2r) < 0.000000001) {
+            n = sinDeg(latin1r);
+        } else {
+            n = Math.log(cosDeg(latin1r) / cosDeg(latin2r)) / Math.log(tanDeg(45 + 0.5 * latin2r) / tanDeg(45 + 0.5 * latin1r));
+        }
+
+        var f = (cosDeg(latin1r) * Math.pow(tanDeg(45 + 0.5 * latin1r), n)) / n;
+
+        var oooRho = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * Lat1), -n);
+        var refRho = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * LatD), -n);
+
+        var dLon = Lon1 - LonV;
+
+        var oooTheta = n * dLon;
+
+        var startx = oooRho * sinDeg(oooTheta);
+        var starty = refRho - oooRho * cosDeg(oooTheta);
+
+        lon = (lon + 180) % 360 + 180; // <<<<<<<<<<
+
+        var newTheta = n * (lon - LonV);
+
+        var newRho = rEarthKm * f / Math.pow(tanDeg(0.5 * (lat + 90)), n);
+
+        if (n < 0) newRho *= -1;
+
+        var tmp = newRho * cosDeg(newTheta);
+
+        var x = tmp * tanDeg(newTheta);
+
+        ix = (x - startx) / dx;
+
+        var y = refRho - tmp;
+
+        iy = -(y - starty) / dy;
+
+        return [ix, iy];
+    };
+
+    this.getIxIy = function (lon, lat) {
+        if (this.gridTypeOfProjection === 0) { // Latitude/longitude
+            return this._fromLongitudeLatitude(lon, lat);
+        }
+
+        if (this.gridTypeOfProjection === 1) { // Rotated latitude/longitude
+            return this._fromRotatedLongitudeLatitude(lon, lat);
+        }
+
+        if (this.gridTypeOfProjection === 20) { // Polar Stereographic Projection
+            return this._fromLambertConformal(lon, lat);
+        }
+
+        if (this.gridTypeOfProjection === 30) { // Lambert Conformal Projection
+            return this._fromLambertConformal(lon, lat);
         }
 
         return [undefined, undefined];
