@@ -10,6 +10,8 @@ var println = logger.println;
 var printst = logger.printst;
 var cout = logger.cout;
 
+var rEarthKm = 6367.470;
+
 function /* int */ uNumX2 (/* int */ m2, /* int */ m1) {
     return ((m2 << 8) + m1);
 }
@@ -148,7 +150,6 @@ function /* float */ IEEE32 (/* String */ s) {
 
     return vSign * vFraction * Math.pow(2, vExponent);
 }
-
 
 module.exports = function /* class */ GRIB2CLASS (options) {
     logger.disable(!options.log);
@@ -1606,4 +1607,222 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
         this.readGrib2Members(numMembers);
     };
+
+    this._toLongitudeLatitude = function (ix, iy) {
+        var lat1 = this.La1;
+        var lon1 = this.Lo1;
+
+        var lat2 = this.La2;
+        var lon2 = this.Lo2;
+
+        lon = ix * (lon2 - lon1) / float(this.gridNx) + lon1;
+        lat = iy * (lat2 - lat1) / float(this.gridNy) + lat1;
+
+        return [lon, lat];
+    };
+
+    this._toRotatedLongitudeLatitude = function (ix, iy) {
+        var lat1 = this.La1;
+        var lon1 = this.Lo1;
+
+        var lat2 = this.La2;
+        var lon2 = this.Lo2;
+
+        lon = ix * (lon2 - lon1) / float(this.gridNx) + lon1;
+        lat = iy * (lat2 - lat1) / float(this.gridNy) + lat1;
+
+        var t1 = this.SouthLon;
+        var t2 = -this.SouthLat - 90;
+        var t3 = this.Rotation - 90;
+
+        var x = cosDeg(lat) * cosDeg(lon);
+        var y = cosDeg(lat) * sinDeg(lon);
+        var z = sinDeg(lat);
+
+        var t;
+
+        t = -t3;
+        {
+            var tmp_x = x * cosDeg(t) - y * sinDeg(t);
+            var tmp_y = y * cosDeg(t) + x * sinDeg(t);
+            var tmp_z = z;
+            x = tmp_x;
+            y = tmp_y;
+            z = tmp_z;
+        }
+
+        t = -t2;
+        {
+            var tmp_y = y * cosDeg(t) - z * sinDeg(t);
+            var tmp_z = z * cosDeg(t) + y * sinDeg(t);
+            var tmp_x = x;
+            x = tmp_x;
+            y = tmp_y;
+            z = tmp_z;
+        }
+
+        t = -t1;
+        {
+            var tmp_x = x * cosDeg(t) - y * sinDeg(t);
+            var tmp_y = y * cosDeg(t) + x * sinDeg(t);
+            var tmp_z = z;
+            x = tmp_x;
+            y = tmp_y;
+            z = tmp_z;
+        }
+
+        lat = asinDeg(z);
+        lon = atan2Deg(y, x);
+
+        if (lon < lon1) lon += 360;
+        else if (lon > lon2) lon -= 360;
+
+        return [lon, lat];
+    };
+
+    this._toPolarStereographic = function (ix, iy) {
+        var Lat1 = this.La1;
+        var Lon1 = this.Lo1;
+
+        var LatD = this.LaD;
+        var LonV = this.LoV;
+
+        var dx = this.Dx;
+        var dy = this.Dy;
+
+        if (this.ScanX == 0) dx = -dx;
+        if (this.ScanY == 0) dy = -dy;
+
+        var h = 1.0;
+        if (this.PCF != 0) {
+            h = -1.0;
+            LonV -= 180;
+        }
+
+        var de = (1.0 + sinDeg(Math.abs(LatD))) * rEarthKm;
+        var dr = de * cosDeg(Lat1) / (1 + h * sinDeg(Lat1));
+
+        var xp = -h * (sinDeg(Lon1 - LonV)) * dr / dx;
+        var yp = (cosDeg(Lon1 - LonV)) * dr / dy;
+
+        var de2 = de * de;
+
+        var di = (ix - xp) * dx;
+        var dj = (-iy - yp) * dy;
+        var dr2 = di * di + dj * dj;
+
+        lat = h * asinDeg((de2 - dr2) / (de2 + dr2));
+        lon = LonV + h * atan2Deg(di, -dj);
+
+        lon = (lon + 360) % 360;
+        if (lon > 180) lon -= 360;
+
+        return [lon, lat];
+    };
+
+    this._toLambertConformal = function (ix, iy) {
+        var Lat1 = this.La1;
+        var Lon1 = this.Lo1;
+
+        var LatD = this.LaD;
+        var LonV = this.LoV;
+
+        var dx = this.Dx;
+        var dy = this.Dy;
+
+        if (this.ScanX == 0) dx = -dx;
+        if (this.ScanY == 0) dy = -dy;
+
+        var h = 1.0;
+        if (this.PCF != 0) {
+            h = -1.0;
+            LonV -= 180;
+        }
+
+        var latin1r = this.FirstLatIn;
+        var latin2r = this.SecondLatIn;
+
+        var n = 0;
+        if (Math.abs(latin1r - latin2r) < 0.000000001) {
+            n = sinDeg(latin1r);
+        } else {
+            n = Math.log(cosDeg(latin1r) / cosDeg(latin2r)) / Math.log(tanDeg(45 + 0.5 * latin2r) / tanDeg(45 + 0.5 * latin1r));
+        }
+
+        var f = (cosDeg(latin1r) * Math.pow(tanDeg(45 + 0.5 * latin1r), n)) / n;
+
+        var rho_ooo = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * Lat1), -n);
+        var rho_ref = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * LatD), -n);
+
+        var d_lon = Lon1 - LonV;
+
+        var theta_ooo = n * d_lon;
+
+        var startx = rho_ooo * sinDeg(theta_ooo);
+        var starty = rho_ref - rho_ooo * cosDeg(theta_ooo);
+
+        var y = starty - iy * dy;
+        var tmp = rho_ref - y;
+
+        var x = startx + ix * dx;
+        var theta_new = atan2Deg(x, tmp);
+        var rho_new = sqrt(x * x + tmp * tmp);
+        if (n < 0) rho_new *= -1;
+
+        lat = 2.0 * atanDeg(Math.pow(rEarthKm * f / rho_new, 1.0 / n)) - 90;
+        lon = LonV + theta_new / n;
+
+        lon = (lon + 360) % 360;
+        if (lon > 180) lon -= 360;
+
+        return [lon, lat];
+    };
+
+    this.getLonLat = function (ix, iy) {
+        if (this.TypeOfProjection === 0) { // Latitude/longitude
+            return this._toLongitudeLatitude(ix, iy);
+        }
+
+        if (this.TypeOfProjection === 1) { // Rotated latitude/longitude
+            return this._toRotatedLongitudeLatitude(ix, iy);
+        }
+
+        if (this.TypeOfProjection === 20) { // Polar Stereographic Projection
+            return this._toPolarStereographic(ix, iy);
+        }
+
+        if (this.TypeOfProjection === 30) { // Lambert Conformal Projection
+            return this._toLambertConformal(ix, iy);
+        }
+
+        return [undefined, undefined];
+    };
 };
+
+function asinDeg (a) {
+    return ((Math.asin(a)) * 180 / Math.PI);
+}
+
+function atanDeg (a) {
+    return ((Math.atan(a)) * 180 / Math.PI);
+}
+
+function atan2Deg (a, b) {
+    return ((Math.atan2(a, b)) * 180 / Math.PI);
+}
+
+function sinDeg (a) {
+    return Math.sin(a * Math.PI / 180);
+}
+
+function cosDeg (a) {
+    return Math.cos(a * Math.PI / 180);
+}
+
+function tanDeg (a) {
+    return Math.tan(a * Math.PI / 180);
+}
+
+function float (i) { // not needed in JS; but added for clarity and make the code portable to other languages.
+    return i * 1.0;
+}
