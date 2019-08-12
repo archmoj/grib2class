@@ -1609,27 +1609,31 @@ module.exports = function /* class */ GRIB2CLASS (options) {
     };
 
     this._toLongitudeLatitude = function (ix, iy) {
+        var lon, lat;
+
         var lat1 = this.La1;
         var lon1 = this.Lo1;
 
         var lat2 = this.La2;
         var lon2 = this.Lo2;
 
-        lon = ix * (lon2 - lon1) / float(this.gridNx) + lon1;
-        lat = iy * (lat2 - lat1) / float(this.gridNy) + lat1;
+        lon = ix * (lon2 - lon1) / float(this.Nx) + lon1;
+        lat = iy * (lat2 - lat1) / float(this.Ny) + lat1;
 
         return [lon, lat];
     };
 
     this._toRotatedLongitudeLatitude = function (ix, iy) {
+        var lon, lat;
+
         var lat1 = this.La1;
         var lon1 = this.Lo1;
 
         var lat2 = this.La2;
         var lon2 = this.Lo2;
 
-        lon = ix * (lon2 - lon1) / float(this.gridNx) + lon1;
-        lat = iy * (lat2 - lat1) / float(this.gridNy) + lat1;
+        lon = ix * (lon2 - lon1) / float(this.Nx) + lon1;
+        lat = iy * (lat2 - lat1) / float(this.Ny) + lat1;
 
         var t1 = this.SouthLon;
         var t2 = -this.SouthLat - 90;
@@ -1681,6 +1685,8 @@ module.exports = function /* class */ GRIB2CLASS (options) {
     };
 
     this._toPolarStereographic = function (ix, iy) {
+        var lon, lat;
+
         var Lat1 = this.La1;
         var Lon1 = this.Lo1;
 
@@ -1721,6 +1727,8 @@ module.exports = function /* class */ GRIB2CLASS (options) {
     };
 
     this._toLambertConformal = function (ix, iy) {
+        var lon, lat;
+
         var Lat1 = this.La1;
         var Lon1 = this.Lo1;
 
