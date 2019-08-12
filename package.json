@@ -4,7 +4,9 @@
   "description": "grib2 reader in pure JavaScript",
   "main": "grib2class.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --version && eslint .",
+    "lint-fix": "eslint . --fix || true"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/archmoj/grib2class/issues"
   },
-  "homepage": "https://github.com/archmoj/grib2class#readme"
+  "homepage": "https://github.com/archmoj/grib2class#readme",
+  "devDependencies": {
+    "eslint": "^6.1.0"
+  }
 }

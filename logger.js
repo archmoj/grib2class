@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var asciiTable = ["NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "HT", "LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS", "RS", "US"];
 
@@ -11,8 +11,8 @@ module.exports = {
 
     println: function (/* optional String */ a, /* optional String */ b) {
         var s =
-            (a === undefined) ? '' :
-                (b === undefined) ? a : a + ' ' + b;
+            (a === undefined) ? "" :
+                (b === undefined) ? a : a + " " + b;
 
         if (log) {
             console.log(s);

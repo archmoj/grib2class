@@ -1,5 +1,5 @@
-'use strict';
+"use strict";
 
-module.exports = function nf0(number) {
+module.exports = function nf0 (number) {
     return Math.round(number);
 };
