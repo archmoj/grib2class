@@ -267,15 +267,17 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var /* int[] */ SectionNumbers = new Int32Array(nFirstBytes);
         SectionNumbers[0] = 0;
 
-        for (var j = 1; j < nFirstBytes; j += 1) {
-            var c = this.fileBytes[nPointer + j];
-            if (c < 0) c += 256;
+        (function (lThis) {
+            for (var j = 1; j < nFirstBytes; j += 1) {
+                var c = lThis.fileBytes[nPointer + j];
+                if (c < 0) c += 256;
 
-            SectionNumbers[j] = c;
+                SectionNumbers[j] = c;
 
-            cout(c);
-        }
-        println();
+                cout(c);
+            }
+            println();
+        })(this);
 
         var /* int */ lengthOfSection = -1;
         if (SectionNumber === 0) lengthOfSection = 16;
@@ -291,15 +293,17 @@ module.exports = function /* class */ GRIB2CLASS (options) {
             SectionNumbers = new Int32Array(1 + lengthOfSection);
             SectionNumbers[0] = 0;
 
-            for (var j = 1; j <= lengthOfSection; j += 1) {
-                var /* int */ c = this.fileBytes[nPointer + j];
-                if (c < 0) c += 256;
+            (function (lThis) {
+                for (var j = 1; j <= lengthOfSection; j += 1) {
+                    var /* int */ c = lThis.fileBytes[nPointer + j];
+                    if (c < 0) c += 256;
 
-                SectionNumbers[j] = c;
+                    SectionNumbers[j] = c;
 
-                //cout(c);
-            }
-            //println();
+                    //cout(c);
+                }
+                //println();
+            })(this);
         } else {
             println();
             println("Not available section", SectionNumber);
@@ -358,7 +362,7 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var /* const int */ gridDefLambertProjectionCenterFlag = 64;
         var /* const int */ gridDefLambert1stLatitudeIn = 66;
         var /* const int */ gridDefLambert2ndLatitudeIn = 70;
-        var /* const int */ gridDefLambertSouthPoleLatitude = 74;
+        // var /* const int */ gridDefLambertSouthPoleLatitude = 74;
         var /* const int */ gridDefLambertSouthPoleLongitude = 78;
 
         var /* int */ gridDefScanningMode = 72;
@@ -1023,9 +1027,12 @@ module.exports = function /* class */ GRIB2CLASS (options) {
             if (this.DataAllocated === false) {
                 this.DataTitles = [];
                 this.DataValues = [];
-                for (var i = 0; i < numMembers; i++) {
-                    this.DataValues[i] = new Float32Array(this.Nx * this.Ny);
-                }
+
+                (function (lThis) {
+                    for (var i = 0; i < numMembers; i++) {
+                        lThis.DataValues[i] = new Float32Array(lThis.Nx * lThis.Ny);
+                    }
+                })(this);
 
                 this.DataAllocated = true;
             }
@@ -1040,16 +1047,17 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
                 if (this.Bitmap_Indicator === 0) { // A bit map applies to this product and is specified in this Section.
                     this.NullBitmapFlags = new Int32Array((SectionNumbers.length - 7) * 8);
-
                     println(">>>>> NullBitmapFlags.length", this.NullBitmapFlags.length);
 
-                    for (var i = 0; i < SectionNumbers.length - 7; i++) {
-                        var /* String */ b = binary(SectionNumbers[7 + i], 8);
+                    (function (lThis) {
+                        for (var i = 0; i < SectionNumbers.length - 7; i++) {
+                            var /* String */ b = binary(SectionNumbers[7 + i], 8);
 
-                        for (var j = 0; j < 8; j++) {
-                            this.NullBitmapFlags[i * 8 + j] = parseInt(b.substring(j, j + 1));
+                            for (var j = 0; j < 8; j++) {
+                                lThis.NullBitmapFlags[i * 8 + j] = parseInt(b.substring(j, j + 1));
+                            }
                         }
-                    }
+                    })(this);
                 }
             }
 
@@ -1144,12 +1152,14 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         println("Rcom =", jpeg2000Rcom);  // Rcom : Registration value of the marker segment
                         n += 2;
 
-                        printst("Comment: ");
-                        for (var i = 0; i < jpeg2000Lcom - 4; i++) {
-                            cout(this.fileBytes[n]);
-                            n += 1;
-                        }
-                        println();
+                        (function (lThis) {
+                            printst("Comment: ");
+                            for (var i = 0; i < jpeg2000Lcom - 4; i++) {
+                                cout(lThis.fileBytes[n]);
+                                n += 1;
+                            }
+                            println();
+                        })(this);
                     }
 
                     println("numXtiles:", (jpeg2000Xsiz - jpeg2000XTOsiz) / jpeg2000XTsiz);
@@ -1257,15 +1267,17 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                     this.printMore(n, 2); // <<<<<<<<<<<<<<<<<<<<
                     n += 2;
 
-                    var /* byte[] */ imageBytes = new Uint8Array(1 + BitmapEndPointer - BitmapBeginPointer);
-                    for (var i = 0; i < imageBytes.length; i++) {
-                        imageBytes[i] = this.fileBytes[i + BitmapBeginPointer];
-                    }
-                    if (numMembers > 1) {
-                        this.DataTitles[memberID] += nf0(memberID, 2);
-                    }
+                    (function (lThis) {
+                        var /* byte[] */ imageBytes = new Uint8Array(1 + BitmapEndPointer - BitmapBeginPointer);
+                        for (var i = 0; i < imageBytes.length; i++) {
+                            imageBytes[i] = lThis.fileBytes[i + BitmapBeginPointer];
+                        }
+                        if (numMembers > 1) {
+                            lThis.DataTitles[memberID] += nf0(memberID, 2);
+                        }
 
-                    this.data = options.jpeg2000decoder(imageBytes);
+                        lThis.data = options.jpeg2000decoder(imageBytes);
+                    })(this);
                 } else {
                     if (numMembers > 1) {
                         this.DataTitles[memberID] += nf0(memberID, 2);
@@ -1291,18 +1303,20 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                     if (this.DataRepresentationTemplateNumber === 0) { // Grid point data - simple packing
                         data = new Float32Array(this.NumberOfDataPoints);
 
-                        for (var i = 0; i < this.NumberOfDataPoints; i++) {
-                            var /* int[] */ m = new Int32Array(this.NumberOfBitsUsedForEachPackedValue);
-                            for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
-                                b += 1;
-                                if (b === 8) {
-                                    b = 0;
-                                    nPointer += 1;
+                        (function (lThis) {
+                            for (var i = 0; i < lThis.NumberOfDataPoints; i++) {
+                                var /* int[] */ m = new Int32Array(lThis.NumberOfBitsUsedForEachPackedValue);
+                                for (var j = 0; j < m.length; j++) {
+                                    m[j] = getNthBit(lThis.fileBytes[nPointer], b);
+                                    b += 1;
+                                    if (b === 8) {
+                                        b = 0;
+                                        nPointer += 1;
+                                    }
                                 }
+                                data[i] = uNumXI(m);
                             }
-                            data[i] = uNumXI(m);
-                        }
+                        })(this);
                     }
 
                     if ((this.DataRepresentationTemplateNumber === 2) || // Grid point data - complex packing
@@ -1314,10 +1328,10 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         var /* int */ FirstValues2 = 0;
                         var /* int */ OverallMinimumOfTheDifferences = 0;
 
-                        {
+                        (function (lThis) {
                             var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                             for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
+                                m[j] = getNthBit(lThis.fileBytes[nPointer], b);
 
                                 b += 1;
                                 if (b === 8) {
@@ -1327,26 +1341,29 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                             }
                             FirstValues1 = sNumXI(m);
                             println("FirstValues1 =", FirstValues1);
-                        }
+                        })(this);
 
                         if (ComplexPackingOrderOfSpatialDifferencing === 2) { //second order spatial differencing
-                            var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
-                            for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
-                                b += 1;
-                                if (b === 8) {
-                                    b = 0;
-                                    nPointer += 1;
+                            (function (lThis) {
+                                var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
+
+                                for (var j = 0; j < m.length; j++) {
+                                    m[j] = getNthBit(lThis.fileBytes[nPointer], b);
+                                    b += 1;
+                                    if (b === 8) {
+                                        b = 0;
+                                        nPointer += 1;
+                                    }
                                 }
-                            }
-                            FirstValues2 = sNumXI(m);
-                            println("FirstValues2 =", FirstValues2);
+                                FirstValues2 = sNumXI(m);
+                                println("FirstValues2 =", FirstValues2);
+                            })(this);
                         }
 
-                        {
+                        (function (lThis) {
                             var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                             for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
+                                m[j] = getNthBit(lThis.fileBytes[nPointer], b);
                                 b += 1;
                                 if (b === 8) {
                                     b = 0;
@@ -1356,24 +1373,26 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
                             OverallMinimumOfTheDifferences = sNumXI(m);
                             println("OverallMinimumOfTheDifferences =", OverallMinimumOfTheDifferences);
-                        }
+                        })(this);
 
                         // read the group reference values
-                        var /* int[] */ group_refs = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
+                        var /* int[] */ groupRefs = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
-                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
-                            var /* int[] */ m = new Int32Array(this.NumberOfBitsUsedForEachPackedValue);
-                            for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
-                                b += 1;
-                                if (b === 8) {
-                                    b = 0;
-                                    nPointer += 1;
+                        (function (lThis) {
+                            for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                var /* int[] */ m = new Int32Array(lThis.NumberOfBitsUsedForEachPackedValue);
+                                for (var j = 0; j < m.length; j++) {
+                                    m[j] = getNthBit(lThis.fileBytes[nPointer], b);
+                                    b += 1;
+                                    if (b === 8) {
+                                        b = 0;
+                                        nPointer += 1;
+                                    }
                                 }
+                                groupRefs[i] = uNumXI(m);
                             }
-                            group_refs[i] = uNumXI(m);
-                        }
-                        //println(group_refs);
+                            //println(groupRefs);
+                        })(this);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
                         if (b !== 0) {
@@ -1382,23 +1401,25 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         }
 
                         // read the group widths
-                        var /* int[] */ group_widths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
+                        var /* int[] */ groupWidths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
-                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
-                            var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForGroupWidths);
-                            for (var j = 0; j < m.length; j++) {
-                                m[j] = getNthBit(this.fileBytes[nPointer], b);
-                                b += 1;
-                                if (b === 8) {
-                                    b = 0;
-                                    nPointer += 1;
+                        (function (lThis) {
+                            for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForGroupWidths);
+                                for (var j = 0; j < m.length; j++) {
+                                    m[j] = getNthBit(lThis.fileBytes[nPointer], b);
+                                    b += 1;
+                                    if (b === 8) {
+                                        b = 0;
+                                        nPointer += 1;
+                                    }
                                 }
-                            }
-                            group_widths[i] = uNumXI(m);
+                                groupWidths[i] = uNumXI(m);
 
-                            group_widths[i] += ComplexPackingReferenceForGroupWidths;
-                        }
-                        //println(group_widths);
+                                groupWidths[i] += ComplexPackingReferenceForGroupWidths;
+                            }
+                            //println(groupWidths);
+                        })(this);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
                         if (b !== 0) {
@@ -1407,28 +1428,30 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         }
 
                         // read the group lengths
-                        var /* int[] */ group_lengths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
+                        var /* int[] */ groupLengths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
                         if (ComplexPackingGroupSplittingMethodUsed === 1) {
-                            for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
-                                var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths);
-                                for (var j = 0; j < m.length; j++) {
-                                    m[j] = getNthBit(this.fileBytes[nPointer], b);
-                                    b += 1;
-                                    if (b === 8) {
-                                        b = 0;
-                                        nPointer += 1;
+                            (function (lThis) {
+                                for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                    var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths);
+                                    for (var j = 0; j < m.length; j++) {
+                                        m[j] = getNthBit(lThis.fileBytes[nPointer], b);
+                                        b += 1;
+                                        if (b === 8) {
+                                            b = 0;
+                                            nPointer += 1;
+                                        }
                                     }
-                                }
-                                group_lengths[i] = uNumXI(m);
+                                    groupLengths[i] = uNumXI(m);
 
-                                group_lengths[i] = group_lengths[i] * ComplexPackingLengthIncrementForTheGroupLengths + ComplexPackingReferenceForGroupLengths;
-                            }
-                            group_lengths[ComplexPackingNumberOfGroupsOfDataValues - 1] = ComplexPackingTrueLengthOfLastGroup;
+                                    groupLengths[i] = groupLengths[i] * ComplexPackingLengthIncrementForTheGroupLengths + ComplexPackingReferenceForGroupLengths;
+                                }
+                                groupLengths[ComplexPackingNumberOfGroupsOfDataValues - 1] = ComplexPackingTrueLengthOfLastGroup;
+                            })(this);
                         } else {
                             println("Error: It does not support this splitting method:", ComplexPackingGroupSplittingMethodUsed);
                         }
-                        //println(group_lengths);
+                        //println(groupLengths);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
                         if (b !== 0) {
@@ -1438,61 +1461,70 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
                         // check
                         var /* int */ total = 0;
-                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
-                            total += group_lengths[i];
-                        }
-                        if (total !== this.NumberOfDataPoints) {
-                            //if (total !== this.Np) {
-                            println("Error: Size mismatch!");
-                        }
+
+                        (function (lThis) {
+                            for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                total += groupLengths[i];
+                            }
+                            if (total !== lThis.NumberOfDataPoints) {
+                                //if (total !== this.Np) {
+                                println("Error: Size mismatch!");
+                            }
+                        })(this);
 
                         data = new Float32Array(total);
 
                         var /* int */ count = 0;
 
-                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
-                            if (group_widths[i] !== 0) {
-                                for (var j = 0; j < group_lengths[i]; j++) {
-                                    var /* int[] */ m = new Int32Array(group_widths[i]);
-                                    for (var k = 0; k < m.length; k++) {
-                                        m[k] = getNthBit(this.fileBytes[nPointer], b);
-                                        b += 1;
-                                        if (b === 8) {
-                                            b = 0;
-                                            nPointer += 1;
+                        (function (lThis) {
+                            var i, j;
+                            for (i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                if (groupWidths[i] !== 0) {
+                                    for (j = 0; j < groupLengths[i]; j++) {
+                                        var /* int[] */ m = new Int32Array(groupWidths[i]);
+                                        for (var k = 0; k < m.length; k++) {
+                                            m[k] = getNthBit(lThis.fileBytes[nPointer], b);
+                                            b += 1;
+                                            if (b === 8) {
+                                                b = 0;
+                                                nPointer += 1;
+                                            }
                                         }
+
+                                        data[count] = uNumXI(m) + groupRefs[i];
+
+                                        count += 1;
                                     }
+                                } else {
+                                    for (j = 0; j < groupLengths[i]; j++) {
+                                        data[count] = groupRefs[i];
 
-                                    data[count] = uNumXI(m) + group_refs[i];
-
-                                    count += 1;
-                                }
-                            } else {
-                                for (var j = 0; j < group_lengths[i]; j++) {
-                                    data[count] = group_refs[i];
-
-                                    count += 1;
+                                        count += 1;
+                                    }
                                 }
                             }
-                        }
+                        })(this);
 
                         // not sure if this algorithm works fine for complex packing WITHOUT spatial differencing ?????
                         if (this.DataRepresentationTemplateNumber === 3) { // Grid point data - complex packing and spatial differencing
                             // spatial differencing
-                            if (ComplexPackingOrderOfSpatialDifferencing === 1) { // case of first order
-                                data[0] = FirstValues1;
-                                for (var i = 1; i < total; i++) {
-                                    data[i] += OverallMinimumOfTheDifferences;
-                                    data[i] = data[i] + data[i - 1];
+                            (function () {
+                                var i;
+                                if (ComplexPackingOrderOfSpatialDifferencing === 1) { // case of first order
+                                    data[0] = FirstValues1;
+                                    for (i = 1; i < total; i++) {
+                                        data[i] += OverallMinimumOfTheDifferences;
+                                        data[i] = data[i] + data[i - 1];
+                                    }
+                                } else if (ComplexPackingOrderOfSpatialDifferencing === 2) { // case of second order
+                                    data[0] = FirstValues1;
+                                    data[1] = FirstValues2;
+                                    for (i = 2; i < total; i++) {
+                                        data[i] += OverallMinimumOfTheDifferences;
+                                        data[i] = data[i] + (2 * data[i - 1]) - data[i - 2];
+                                    }
                                 }
-                            } else if (ComplexPackingOrderOfSpatialDifferencing === 2) { // case of second order
-                                data[0] = FirstValues1;
-                                data[1] = FirstValues2;
-                                for (var i = 2; i < total; i++) {
-                                    data[i] += OverallMinimumOfTheDifferences;
-                                    data[i] = data[i] + (2 * data[i - 1]) - data[i - 2];
-                                }
-                            }
+                            })();
                         }
                     }
 
@@ -1503,35 +1535,39 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         // Mode  192 -x, +y, adjacent x, adjacent rows same dir
                         // change -x to +x ie east to west -> west to east
                     } else if ((this.ScanningMode === 128) || (this.ScanningMode === 192)) {
-                        var /* float */ tmp;
-                        var /* int */ mid = int(this.Nx / 2);
-                        //println( "this.Nx =" +this.Nx +" mid ="+ mid );
-                        for (var index = 0; index < data.length; index += this.Nx) {
-                            for (var idx = 0; idx < mid; idx++) {
-                                tmp = data[index + idx];
-                                data[index + idx] = data[index + this.Nx - idx - 1];
-                                data[index + this.Nx - idx - 1] = tmp;
-                                //println( "switch " + (index + idx) + " " +
-                                //(index + this.Nx -idx -1) );
-                            }
-                        }
-                    } else {
-                        // scanMode === 16, 80, 144, 208 adjacent rows scan opposite dir
-                        var /* float */ tmp;
-                        var /* int */ mid = int(this.Nx / 2);
-                        //println( "this.Nx =" +this.Nx +" mid ="+ mid );
-                        for (var index = 0; index < data.length; index += this.Nx) {
-                            var /* int */ row = int(index / this.Nx);
-                            if (row % 2 === 1) {  // odd numbered row, calculate reverse index
+                        (function (lThis) {
+                            var /* float */ tmp;
+                            var /* int */ mid = nf0(lThis.Nx / 2);
+                            //println( "lThis.Nx =" +lThis.Nx +" mid ="+ mid );
+                            for (var index = 0; index < data.length; index += lThis.Nx) {
                                 for (var idx = 0; idx < mid; idx++) {
                                     tmp = data[index + idx];
-                                    data[index + idx] = data[index + this.Nx - idx - 1];
-                                    data[index + this.Nx - idx - 1] = tmp;
+                                    data[index + idx] = data[index + lThis.Nx - idx - 1];
+                                    data[index + lThis.Nx - idx - 1] = tmp;
                                     //println( "switch " + (index + idx) + " " +
-                                    //(index + this.Nx -idx -1) );
+                                    //(index + lThis.Nx -idx -1) );
                                 }
                             }
-                        }
+                        })(this);
+                    } else {
+                        (function (lThis) {
+                            // scanMode === 16, 80, 144, 208 adjacent rows scan opposite dir
+                            var /* float */ tmp;
+                            var /* int */ mid = nf0(lThis.Nx / 2);
+                            //println( "lThis.Nx =" +lThis.Nx +" mid ="+ mid );
+                            for (var index = 0; index < data.length; index += lThis.Nx) {
+                                var /* int */ row = nf0(index / lThis.Nx);
+                                if (row % 2 === 1) {  // odd numbered row, calculate reverse index
+                                    for (var idx = 0; idx < mid; idx++) {
+                                        tmp = data[index + idx];
+                                        data[index + idx] = data[index + lThis.Nx - idx - 1];
+                                        data[index + lThis.Nx - idx - 1] = tmp;
+                                        //println( "switch " + (index + idx) + " " +
+                                        //(index + lThis.Nx -idx -1) );
+                                    }
+                                }
+                            }
+                        })(this);
                     }
 
                     //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
@@ -1542,30 +1578,34 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
                     nPointer -= 1; // <<<<????
 
-                    var /* float */ BB = Math.pow(2, this.BinaryScaleFactor);
-                    var /* float */ DD = Math.pow(10, this.DecimalScaleFactor);
-                    var /* float */ RR = this.ReferenceValue;
+                    (function (lThis) {
+                        var /* float */ BB = Math.pow(2, lThis.BinaryScaleFactor);
+                        var /* float */ DD = Math.pow(10, lThis.DecimalScaleFactor);
+                        var /* float */ RR = lThis.ReferenceValue;
 
-                    if (this.Bitmap_Indicator === 0) { // A bit map applies to this product
-                        var /* int */ i = -1;
-                        for (var q = 0; q < this.Nx * this.Ny; q++) {
-                            if (this.NullBitmapFlags[q] === 0) {
-                                this.DataValues[memberID][q] = undefined;
-                            } else {
-                                i += 1;
+                        var i, q;
 
-                                this.DataValues[memberID][q] = ((data[i] * BB) + RR) / DD;
+                        if (this.Bitmap_Indicator === 0) { // A bit map applies to this product
+                            i = -1;
+                            for (q = 0; q < lThis.Nx * lThis.Ny; q++) {
+                                if (lThis.NullBitmapFlags[q] === 0) {
+                                    lThis.DataValues[memberID][q] = undefined;
+                                } else {
+                                    i += 1;
+
+                                    lThis.DataValues[memberID][q] = ((data[i] * BB) + RR) / DD;
+                                }
+                            }
+                        } else {
+                            for (q = 0; q < lThis.Nx * lThis.Ny; q++) {
+                                i = q;
+
+                                lThis.DataValues[memberID][q] = ((data[i] * BB) + RR) / DD;
                             }
                         }
-                    } else {
-                        for (var q = 0; q < this.Nx * this.Ny; q++) {
-                            var /* int */ i = q;
 
-                            this.DataValues[memberID][q] = ((data[i] * BB) + RR) / DD;
-                        }
-                    }
-
-                    //for (var q = 0; q < 20; q++) println(this.DataValues[memberID][q]);
+                        //for (var q = 0; q < 20; q++) println(lThis.DataValues[memberID][q]);
+                    })(this);
 
                     if (numMembers > 1) {
                         this.DataTitles[memberID] += nf0(memberID, 2);
@@ -1580,24 +1620,27 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                 var /* float */ DD = Math.pow(10, this.DecimalScaleFactor);
                 var /* float */ RR = this.ReferenceValue;
 
-                if (this.Bitmap_Indicator === 0) { // A bit map applies to this product
-                    var /* int */ i = -1;
-                    for (var q = 0; q < this.Nx * this.Ny; q++) {
-                        if (this.NullBitmapFlags[q] === 0) {
-                            this.DataValues[memberID][q] = undefined;
-                        } else {
-                            i += 1;
+                (function (lThis) {
+                    var i, q;
+                    if (lThis.Bitmap_Indicator === 0) { // A bit map applies to this product
+                        i = -1;
+                        for (q = 0; q < lThis.Nx * lThis.Ny; q++) {
+                            if (lThis.NullBitmapFlags[q] === 0) {
+                                lThis.DataValues[memberID][q] = undefined;
+                            } else {
+                                i += 1;
 
-                            this.DataValues[memberID][q] = ((this.data[i] * BB) + RR) / DD;
+                                lThis.DataValues[memberID][q] = ((lThis.data[i] * BB) + RR) / DD;
+                            }
+                        }
+                    } else {
+                        for (q = 0; q < lThis.Nx * lThis.Ny; q++) {
+                            i = q;
+
+                            lThis.DataValues[memberID][q] = ((lThis.data[i] * BB) + RR) / DD;
                         }
                     }
-                } else {
-                    for (var q = 0; q < this.Nx * this.Ny; q++) {
-                        var /* int */ i = q;
-
-                        this.DataValues[memberID][q] = ((this.data[i] * BB) + RR) / DD;
-                    }
-                }
+                })(this);
             }
         }
     };
@@ -1646,33 +1689,34 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var t;
 
         t = -t3;
+        var tmpX, tmpY, tmpZ;
         {
-            var tmp_x = x * cosDeg(t) - y * sinDeg(t);
-            var tmp_y = y * cosDeg(t) + x * sinDeg(t);
-            var tmp_z = z;
-            x = tmp_x;
-            y = tmp_y;
-            z = tmp_z;
+            tmpX = x * cosDeg(t) - y * sinDeg(t);
+            tmpY = y * cosDeg(t) + x * sinDeg(t);
+            tmpZ = z;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
         }
 
         t = -t2;
         {
-            var tmp_y = y * cosDeg(t) - z * sinDeg(t);
-            var tmp_z = z * cosDeg(t) + y * sinDeg(t);
-            var tmp_x = x;
-            x = tmp_x;
-            y = tmp_y;
-            z = tmp_z;
+            tmpY = y * cosDeg(t) - z * sinDeg(t);
+            tmpZ = z * cosDeg(t) + y * sinDeg(t);
+            tmpX = x;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
         }
 
         t = -t1;
         {
-            var tmp_x = x * cosDeg(t) - y * sinDeg(t);
-            var tmp_y = y * cosDeg(t) + x * sinDeg(t);
-            var tmp_z = z;
-            x = tmp_x;
-            y = tmp_y;
-            z = tmp_z;
+            tmpX = x * cosDeg(t) - y * sinDeg(t);
+            tmpY = y * cosDeg(t) + x * sinDeg(t);
+            tmpZ = z;
+            x = tmpX;
+            y = tmpY;
+            z = tmpZ;
         }
 
         lat = asinDeg(z);
@@ -1696,11 +1740,11 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var dx = this.Dx;
         var dy = this.Dy;
 
-        if (this.ScanX == 0) dx = -dx;
-        if (this.ScanY == 0) dy = -dy;
+        if (this.ScanX === 0) dx = -dx;
+        if (this.ScanY === 0) dy = -dy;
 
         var h = 1.0;
-        if (this.PCF != 0) {
+        if (this.PCF !== 0) {
             h = -1.0;
             LonV -= 180;
         }
@@ -1738,12 +1782,12 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var dx = this.Dx;
         var dy = this.Dy;
 
-        if (this.ScanX == 0) dx = -dx;
-        if (this.ScanY == 0) dy = -dy;
+        if (this.ScanX === 0) dx = -dx;
+        if (this.ScanY === 0) dy = -dy;
 
-        var h = 1.0;
-        if (this.PCF != 0) {
-            h = -1.0;
+        // var h = 1.0;
+        if (this.PCF !== 0) {
+            // h = -1.0;
             LonV -= 180;
         }
 
@@ -1759,26 +1803,26 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
         var f = (cosDeg(latin1r) * Math.pow(tanDeg(45 + 0.5 * latin1r), n)) / n;
 
-        var rho_ooo = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * Lat1), -n);
-        var rho_ref = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * LatD), -n);
+        var oooRho = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * Lat1), -n);
+        var refRho = rEarthKm * f * Math.pow(tanDeg(45 + 0.5 * LatD), -n);
 
-        var d_lon = Lon1 - LonV;
+        var dLon = Lon1 - LonV;
 
-        var theta_ooo = n * d_lon;
+        var oooTheta = n * dLon;
 
-        var startx = rho_ooo * sinDeg(theta_ooo);
-        var starty = rho_ref - rho_ooo * cosDeg(theta_ooo);
+        var startx = oooRho * sinDeg(oooTheta);
+        var starty = refRho - oooRho * cosDeg(oooTheta);
 
         var y = starty - iy * dy;
-        var tmp = rho_ref - y;
+        var tmp = refRho - y;
 
         var x = startx + ix * dx;
-        var theta_new = atan2Deg(x, tmp);
-        var rho_new = sqrt(x * x + tmp * tmp);
-        if (n < 0) rho_new *= -1;
+        var newTheta = atan2Deg(x, tmp);
+        var newRho = Math.sqrt(x * x + tmp * tmp);
+        if (n < 0) newRho *= -1;
 
-        lat = 2.0 * atanDeg(Math.pow(rEarthKm * f / rho_new, 1.0 / n)) - 90;
-        lon = LonV + theta_new / n;
+        lat = 2.0 * atanDeg(Math.pow(rEarthKm * f / newRho, 1.0 / n)) - 90;
+        lon = LonV + newTheta / n;
 
         lon = (lon + 360) % 360;
         if (lon > 180) lon -= 360;

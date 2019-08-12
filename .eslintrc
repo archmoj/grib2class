@@ -60,7 +60,6 @@
     "one-var": [2, { "initialized": "never" }],
     "no-undef-init": [2],
     "no-use-before-define": [2, "nofunc"],
-    "no-loop-func": [2],
     "no-unused-labels": [2],
     "no-useless-escape": [0],
     "func-name-matching": ["error", "always"],
