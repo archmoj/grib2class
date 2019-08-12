@@ -10,11 +10,11 @@ var println = logger.println;
 var printst = logger.printst;
 var cout = logger.cout;
 
-function /* int */ U_NUMx2(/* int */ m2, /* int */ m1) {
+function /* int */ uNumX2 (/* int */ m2, /* int */ m1) {
     return ((m2 << 8) + m1);
 }
 
-function /* int */ S_NUMx2(/* int */ m2, /* int */ m1) {
+function /* int */ sNumX2 (/* int */ m2, /* int */ m1) {
     var /* long */ v = 0;
 
     if (m2 < 128) {
@@ -28,11 +28,11 @@ function /* int */ S_NUMx2(/* int */ m2, /* int */ m1) {
     return /* (int) */ v;
 }
 
-function /* int */ U_NUMx4(/* int */ m4, /* int */ m3, /* int */ m2, /* int */ m1) {
+function /* int */ uNumX4 (/* int */ m4, /* int */ m3, /* int */ m2, /* int */ m1) {
     return ((m4 << 24) + (m3 << 16) + (m2 << 8) + m1);
 }
 
-function /* int */ S_NUMx4(/* int */ m4, /* int */ m3, /* int */m2, /* int */ m1) {
+function /* int */ sNumX4 (/* int */ m4, /* int */ m3, /* int */m2, /* int */ m1) {
     var /* long */ v = 0;
 
     if (m4 < 128) {
@@ -46,11 +46,11 @@ function /* int */ S_NUMx4(/* int */ m4, /* int */ m3, /* int */m2, /* int */ m1
     return /* (int) */ v;
 }
 
-function /* long */ U_NUMx8(/* int */ m8, /* int */ m7, /* int */ m6, /* int */ m5, /* int */ m4, /* int */ m3, /* int */ m2, /* int */ m1) {
+function /* long */ uNumX8 (/* int */ m8, /* int */ m7, /* int */ m6, /* int */ m5, /* int */ m4, /* int */ m3, /* int */ m2, /* int */ m1) {
     return (m8 << 56) + (m7 << 48) + (m6 << 40) + (m5 << 32) + (m4 << 24) + (m3 << 16) + (m2 << 8) + m1;
 }
 
-function /* int */ U_NUMxI(/* int[] */ m) { // note: follows reverse rule as this: int m[0], int m[1], int m[2] ...
+function /* int */ uNumXI (/* int[] */ m) { // note: follows reverse rule as this: int m[0], int m[1], int m[2] ...
     // println(m);
 
     var /* long */ v = 0;
@@ -65,42 +65,42 @@ function /* int */ U_NUMxI(/* int[] */ m) { // note: follows reverse rule as thi
     return /* (int) */ v;
 }
 
-function /* int */ S_NUMxI(/* int[] */ m) { // note: follows reverse rule as this: int m[0], int m[1], int m[2] ...
+function /* int */ sNumXI (/* int[] */ m) { // note: follows reverse rule as this: int m[0], int m[1], int m[2] ...
     // println(m);
 
     var /* long */ v = 0;
-    var v_sign = 1;
+    var vSign = 1;
 
     if (m[0] < 1) {
         v += m[0] << (m.length - 1);
     } else {
         v += (m[0] - 1) << (m.length - 1);
-        v_sign = -1;
+        vSign = -1;
     }
 
     for (var i = 1; i < m.length; i++) {
         v += m[i] << (m.length - 1 - i);
     }
 
-    v *= v_sign;
+    v *= vSign;
 
     // println(v);
 
     return /* (int) */ v;
 }
 
-function /* int */ getNthBit(/* Byte */ valByte, /* int */ posBit) {
+function /* int */ getNthBit (/* Byte */ valByte, /* int */ posBit) {
     var valInt = valByte >> (8 - (posBit + 1)) & 0x0001;
 
     return /* (int) */ valInt;
 }
 
 
-function hex(byte) {
+function hex (byte) {
     return Buffer.from([byte]).toString("hex").toUpperCase();
 }
 
-function binary(uint, n) {
+function binary (uint, n) {
     var s = uint.toString(2);
     var len = s.length;
     var zeros = "";
@@ -111,11 +111,11 @@ function binary(uint, n) {
     return (zeros + s).substring(0, n);
 }
 
-function /* String */ integerToBinaryString(/* int */ n) {
+function /* String */ integerToBinaryString (/* int */ n) {
     return n.toString(2);
 }
 
-function /* String */ IntToBinary32(/* int */ n) {
+function /* String */ IntToBinary32 (/* int */ n) {
     var i;
     var s1 = integerToBinaryString(n);
     var len = s1.length;
@@ -131,26 +131,26 @@ function /* String */ IntToBinary32(/* int */ n) {
     return s2;
 }
 
-function /* float */ IEEE32(/* String */ s) {
-    var /* float */ v_sign = Math.pow(-1, parseInt(s.substring(0, 1), 2));
+function /* float */ IEEE32 (/* String */ s) {
+    var /* float */ vSign = Math.pow(-1, parseInt(s.substring(0, 1), 2));
     //println("v_sign", v_sign);
 
-    var /* float */ v_exponent = parseInt(s.substring(1, 9), 2) - 127;
+    var /* float */ vExponent = parseInt(s.substring(1, 9), 2) - 127;
     //println("v_exponent", v_exponent);
 
-    var /* float */ v_fraction = 0;
+    var /* float */ vFraction = 0;
     for (var i = 0; i < 23; i++) {
         var q = parseInt(s.substring(9 + i, 10 + i), 2);
-        v_fraction += q * Math.pow(2, -(i + 1));
+        vFraction += q * Math.pow(2, -(i + 1));
     }
-    v_fraction += 1;
+    vFraction += 1;
     //println("v_fraction", v_fraction);
 
-    return v_sign * v_fraction * Math.pow(2, v_exponent);
+    return vSign * vFraction * Math.pow(2, vExponent);
 }
 
 
-module.exports = function /* class */ GRIB2CLASS(options) {
+module.exports = function /* class */ GRIB2CLASS (options) {
     logger.disable(!options.log);
     var numMembers = options.numMembers || 1;
 
@@ -236,17 +236,19 @@ module.exports = function /* class */ GRIB2CLASS(options) {
     var /* int */ nPointer;
 
     this.printMore = function (/* int */ startN, /* int */ displayMORE) {
-        for (var i = 0; i < displayMORE; i++) {
+        var i;
+
+        for (i = 0; i < displayMORE; i++) {
             cout(this.fileBytes[startN + i]);
         }
         println();
 
-        for (var i = 0; i < displayMORE; i++) {
+        for (i = 0; i < displayMORE; i++) {
             printst("(" + hex(this.fileBytes[startN + i], 2) + ")");
         }
         println();
 
-        for (var i = 0; i < displayMORE; i++) {
+        for (i = 0; i < displayMORE; i++) {
             printst("[" + this.fileBytes[startN + i] + "]");
         }
         println();
@@ -277,14 +279,14 @@ module.exports = function /* class */ GRIB2CLASS(options) {
         var /* int */ lengthOfSection = -1;
         if (SectionNumber === 0) lengthOfSection = 16;
         else if (SectionNumber === 8) lengthOfSection = 4;
-        else lengthOfSection = U_NUMx4(SectionNumbers[1], SectionNumbers[2], SectionNumbers[3], SectionNumbers[4]);
+        else lengthOfSection = uNumX4(SectionNumbers[1], SectionNumbers[2], SectionNumbers[3], SectionNumbers[4]);
 
-        var /* int */ new_SectionNumber = -1;
-        if (SectionNumber === 0) new_SectionNumber = 0;
-        else if (SectionNumber === 8) new_SectionNumber = 8;
-        else new_SectionNumber = SectionNumbers[5];
+        var /* int */ newSectionNumber = -1;
+        if (SectionNumber === 0) newSectionNumber = 0;
+        else if (SectionNumber === 8) newSectionNumber = 8;
+        else newSectionNumber = SectionNumbers[5];
 
-        if (new_SectionNumber === SectionNumber) {
+        if (newSectionNumber === SectionNumber) {
             SectionNumbers = new Int32Array(1 + lengthOfSection);
             SectionNumbers[0] = 0;
 
@@ -322,98 +324,98 @@ module.exports = function /* class */ GRIB2CLASS(options) {
     };
 
     this.readGrib2Members = function (/* int */ numberOfMembers) {
-        var /* const int */ GridDEF_NumberOfDataPoints = 7;
-        var /* const int */ GridDEF_NumberOfPointsAlongTheXaxis = 31;
-        var /* const int */ GridDEF_NumberOfPointsAlongTheYaxis = 35;
+        var /* const int */ gridDefNumberOfDataPoints = 7;
+        var /* const int */ gridDefNumberOfPointsAlongTheXaxis = 31;
+        var /* const int */ gridDefNumberOfPointsAlongTheYaxis = 35;
 
-        var /* const int */ GridDEF_LatLon_LatitudeOfFirstGridPoint = 47;
-        var /* const int */ GridDEF_LatLon_LongitudeOfFirstGridPoint = 51;
-        var /* const int */ GridDEF_LatLon_ResolutionAndComponentFlags = 55;
-        var /* const int */ GridDEF_LatLon_LatitudeOfLastGridPoint = 56;
-        var /* const int */ GridDEF_LatLon_LongitudeOfLastGridPoint = 60;
+        var /* const int */ gridDefLatLonLatitudeOfFirstGridPoint = 47;
+        var /* const int */ gridDefLatLonLongitudeOfFirstGridPoint = 51;
+        var /* const int */ gridDefLatLonResolutionAndComponentFlags = 55;
+        var /* const int */ gridDefLatLonLatitudeOfLastGridPoint = 56;
+        var /* const int */ gridDefLatLonLongitudeOfLastGridPoint = 60;
         // for Rotated latitude/longitude :
-        var /* const int */ GridDEF_LatLon_SouthPoleLatitude = 73;
-        var /* const int */ GridDEF_LatLon_SouthPoleLongitude = 77;
-        var /* const int */ GridDEF_LatLon_RotationOfProjection = 81;
+        var /* const int */ gridDefLatLonSouthPoleLatitude = 73;
+        var /* const int */ gridDefLatLonSouthPoleLongitude = 77;
+        var /* const int */ gridDefLatLonRotationOfProjection = 81;
 
-        var /* const int */ GridDEF_Polar_LatitudeOfFirstGridPoint = 39;
-        var /* const int */ GridDEF_Polar_LongitudeOfFirstGridPoint = 43;
-        var /* const int */ GridDEF_Polar_ResolutionAndComponentFlags = 47;
-        var /* const int */ GridDEF_Polar_DeclinationOfTheGrid = 48;
-        var /* const int */ GridDEF_Polar_OrientationOfTheGrid = 52;
-        var /* const int */ GridDEF_Polar_XDirectionGridLength = 56;
-        var /* const int */ GridDEF_Polar_YDirectionGridLength = 60;
-        var /* const int */ GridDEF_Polar_ProjectionCenterFlag = 64;
+        var /* const int */ gridDefPolarLatitudeOfFirstGridPoint = 39;
+        var /* const int */ gridDefPolarLongitudeOfFirstGridPoint = 43;
+        var /* const int */ gridDefPolarResolutionAndComponentFlags = 47;
+        var /* const int */ gridDefPolarDeclinationOfTheGrid = 48;
+        var /* const int */ gridDefPolarOrientationOfTheGrid = 52;
+        var /* const int */ gridDefPolarXDirectionGridLength = 56;
+        var /* const int */ gridDefPolarYDirectionGridLength = 60;
+        var /* const int */ gridDefPolarProjectionCenterFlag = 64;
 
-        var /* const int */ GridDEF_Lambert_LatitudeOfFirstGridPoint = 39;
-        var /* const int */ GridDEF_Lambert_LongitudeOfFirstGridPoint = 43;
-        var /* const int */ GridDEF_Lambert_ResolutionAndComponentFlags = 47;
-        var /* const int */ GridDEF_Lambert_DeclinationOfTheGrid = 48;
-        var /* const int */ GridDEF_Lambert_OrientationOfTheGrid = 52;
-        var /* const int */ GridDEF_Lambert_XDirectionGridLength = 56;
-        var /* const int */ GridDEF_Lambert_YDirectionGridLength = 60;
-        var /* const int */ GridDEF_Lambert_ProjectionCenterFlag = 64;
-        var /* const int */ GridDEF_Lambert_1stLatitudeIn = 66;
-        var /* const int */ GridDEF_Lambert_2ndLatitudeIn = 70;
-        var /* const int */ GridDEF_Lambert_SouthPoleLatitude = 74;
-        var /* const int */ GridDEF_Lambert_SouthPoleLongitude = 78;
+        var /* const int */ gridDefLambertLatitudeOfFirstGridPoint = 39;
+        var /* const int */ gridDefLambertLongitudeOfFirstGridPoint = 43;
+        var /* const int */ gridDefLambertResolutionAndComponentFlags = 47;
+        var /* const int */ gridDefLambertDeclinationOfTheGrid = 48;
+        var /* const int */ gridDefLambertOrientationOfTheGrid = 52;
+        var /* const int */ gridDefLambertXDirectionGridLength = 56;
+        var /* const int */ gridDefLambertYDirectionGridLength = 60;
+        var /* const int */ gridDefLambertProjectionCenterFlag = 64;
+        var /* const int */ gridDefLambert1stLatitudeIn = 66;
+        var /* const int */ gridDefLambert2ndLatitudeIn = 70;
+        var /* const int */ gridDefLambertSouthPoleLatitude = 74;
+        var /* const int */ gridDefLambertSouthPoleLongitude = 78;
 
-        var /* int */ GridDEF_ScanningMode = 72;
+        var /* int */ gridDefScanningMode = 72;
 
-        var /* int */ ComplexPacking_GroupSplittingMethodUsed = 0;
-        var /* int */ ComplexPacking_MissingValueManagementUsed = 0;
-        var /* float */ ComplexPacking_PrimaryMissingValueSubstitute = 0.0;
-        var /* float */ ComplexPacking_SecondaryMissingValueSubstitute = 0.0;
-        var /* int */ ComplexPacking_NumberOfGroupsOfDataValues = 0;
-        var /* int */ ComplexPacking_ReferenceForGroupWidths = 0;
-        var /* int */ ComplexPacking_NumberOfBitsUsedForGroupWidths = 0;
-        var /* int */ ComplexPacking_ReferenceForGroupLengths = 0;
-        var /* int */ ComplexPacking_LengthIncrementForTheGroupLengths = 0;
-        var /* int */ ComplexPacking_TrueLengthOfLastGroup = 0;
-        var /* int */ ComplexPacking_NumberOfBitsUsedForTheScaledGroupLengths = 0;
-        var /* int */ ComplexPacking_OrderOfSpatialDifferencing = 0;
-        var /* int */ ComplexPacking_NumberOfExtraOctetsRequiredInDataSection = 0;
+        var /* int */ ComplexPackingGroupSplittingMethodUsed = 0;
+        var /* int */ ComplexPackingMissingValueManagementUsed = 0;
+        var /* float */ ComplexPackingPrimaryMissingValueSubstitute = 0.0;
+        var /* float */ ComplexPackingSecondaryMissingValueSubstitute = 0.0;
+        var /* int */ ComplexPackingNumberOfGroupsOfDataValues = 0;
+        var /* int */ ComplexPackingReferenceForGroupWidths = 0;
+        var /* int */ ComplexPackingNumberOfBitsUsedForGroupWidths = 0;
+        var /* int */ ComplexPackingReferenceForGroupLengths = 0;
+        var /* int */ ComplexPackingLengthIncrementForTheGroupLengths = 0;
+        var /* int */ ComplexPackingTrueLengthOfLastGroup = 0;
+        var /* int */ ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths = 0;
+        var /* int */ ComplexPackingOrderOfSpatialDifferencing = 0;
+        var /* int */ ComplexPackingNumberOfExtraOctetsRequiredInDataSection = 0;
 
         this.Bitmap_Indicator = 0;
-        var /* int */ Bitmap_beginPointer = 0;
-        var /* int */ Bitmap_endPointer = 0;
+        var /* int */ BitmapBeginPointer = 0;
+        var /* int */ BitmapEndPointer = 0;
 
-        var /* int */ JPEG2000_TypeOfOriginalFieldValues = 0;
-        var /* int */ JPEG2000_TypeOfCompression = 0;
-        var /* int */ JPEG2000_TargetCompressionRatio = 0;
-        var /* int */ JPEG2000_Lsiz = 0;
-        var /* int */ JPEG2000_Rsiz = 0;
-        var /* int */ JPEG2000_Xsiz = 0;
-        var /* int */ JPEG2000_Ysiz = 0;
-        var /* int */ JPEG2000_XOsiz = 0;
-        var /* int */ JPEG2000_YOsiz = 0;
-        var /* int */ JPEG2000_XTsiz = 0;
-        var /* int */ JPEG2000_YTsiz = 0;
-        var /* int */ JPEG2000_XTOsiz = 0;
-        var /* int */ JPEG2000_YTOsiz = 0;
-        var /* int */ JPEG2000_Csiz = 0;
-        var /* int */ JPEG2000_Ssiz = 0;
-        var /* int */ JPEG2000_XRsiz = 0;
-        var /* int */ JPEG2000_YRsiz = 0;
-        var /* int */ JPEG2000_Lcom = 0;
-        var /* int */ JPEG2000_Rcom = 0;
-        var /* int */ JPEG2000_Lcod = 0;
-        var /* int */ JPEG2000_Scod = 0;
-        var /* int */ JPEG2000_SGcod_ProgressionOrder = 0;
-        var /* int */ JPEG2000_SGcod_NumberOfLayers = 0;
-        var /* int */ JPEG2000_SGcod_MultipleComponentTransformation = 0;
-        var /* int */ JPEG2000_SPcod_NumberOfDecompositionLevels = 0;
-        var /* int */ JPEG2000_SPcod_CodeBlockWidth = 0;
-        var /* int */ JPEG2000_SPcod_CodeBlockHeight = 0;
-        var /* int */ JPEG2000_SPcod_CodeBlockStyle = 0;
-        var /* int */ JPEG2000_SPcod_Transformation = 0;
-        var /* int */ JPEG2000_Lqcd = 0;
-        var /* int */ JPEG2000_Sqcd = 0;
-        var /* int */ JPEG2000_Lsot = 0;
-        var /* int */ JPEG2000_Isot = 0;
-        var /* int */ JPEG2000_Psot = 0;
-        var /* int */ JPEG2000_TPsot = 0;
-        var /* int */ JPEG2000_TNsot = 0;
+        var /* int */ jpeg2000TypeOfOriginalFieldValues = 0;
+        var /* int */ jpeg2000TypeOfCompression = 0;
+        var /* int */ jpeg2000TargetCompressionRatio = 0;
+        var /* int */ jpeg2000Lsiz = 0;
+        var /* int */ jpeg2000Rsiz = 0;
+        var /* int */ jpeg2000Xsiz = 0;
+        var /* int */ jpeg2000Ysiz = 0;
+        var /* int */ jpeg2000XOsiz = 0;
+        var /* int */ jpeg2000YOsiz = 0;
+        var /* int */ jpeg2000XTsiz = 0;
+        var /* int */ jpeg2000YTsiz = 0;
+        var /* int */ jpeg2000XTOsiz = 0;
+        var /* int */ jpeg2000YTOsiz = 0;
+        var /* int */ jpeg2000Csiz = 0;
+        var /* int */ jpeg2000Ssiz = 0;
+        var /* int */ jpeg2000XRsiz = 0;
+        var /* int */ jpeg2000YRsiz = 0;
+        var /* int */ jpeg2000Lcom = 0;
+        var /* int */ jpeg2000Rcom = 0;
+        var /* int */ jpeg2000Lcod = 0;
+        var /* int */ jpeg2000Scod = 0;
+        var /* int */ jpeg2000SGcodProgressionOrder = 0;
+        var /* int */ jpeg2000SGcodNumberOfLayers = 0;
+        var /* int */ jpeg2000SGcodMultipleComponentTransformation = 0;
+        var /* int */ jpeg2000SPcodNumberOfDecompositionLevels = 0;
+        var /* int */ jpeg2000SPcodCodeBlockWidth = 0;
+        var /* int */ jpeg2000SPcodCodeBlockHeight = 0;
+        var /* int */ jpeg2000SPcodCodeBlockStyle = 0;
+        var /* int */ jpeg2000SPcodTransformation = 0;
+        var /* int */ jpeg2000Lqcd = 0;
+        var /* int */ jpeg2000Sqcd = 0;
+        var /* int */ jpeg2000Lsot = 0;
+        var /* int */ jpeg2000Isot = 0;
+        var /* int */ jpeg2000Psot = 0;
+        var /* int */ jpeg2000TPsot = 0;
+        var /* int */ jpeg2000TNsot = 0;
 
         nPointer = -1;
 
@@ -426,7 +428,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                 info.DisciplineOfProcessedData(lThis);
 
                 printst("Length of message:\t");
-                this.LengthOfMessage = U_NUMx8(SectionNumbers[9], SectionNumbers[10], SectionNumbers[11], SectionNumbers[12], SectionNumbers[13], SectionNumbers[14], SectionNumbers[15], SectionNumbers[16]);
+                this.LengthOfMessage = uNumX8(SectionNumbers[9], SectionNumbers[10], SectionNumbers[11], SectionNumbers[12], SectionNumbers[13], SectionNumbers[14], SectionNumbers[15], SectionNumbers[16]);
                 println(this.LengthOfMessage);
             }
 
@@ -434,11 +436,11 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
             if (SectionNumbers.length > 1) {
                 printst("Identification of originating/generating centre: ");
-                this.IdentificationOfCentre = U_NUMx2(SectionNumbers[6], SectionNumbers[7]);
+                this.IdentificationOfCentre = uNumX2(SectionNumbers[6], SectionNumbers[7]);
                 info.IdentificationOfCentre(lThis);
 
                 printst("Sub-centre:\t");
-                this.IdentificationOfSubCentre = U_NUMx2(SectionNumbers[8], SectionNumbers[9]);
+                this.IdentificationOfSubCentre = uNumX2(SectionNumbers[8], SectionNumbers[9]);
                 info.IdentificationOfSubCentre(lThis);
 
                 printst("Master Tables Version Number:\t");
@@ -454,7 +456,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                 info.SignificanceOfReferenceTime(lThis);
 
                 printst("Year:\t");
-                this.Year = U_NUMx2(SectionNumbers[13], SectionNumbers[14]);
+                this.Year = uNumX2(SectionNumbers[13], SectionNumbers[14]);
                 println(this.Year);
 
                 printst("Month:\t");
@@ -488,162 +490,163 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
             SectionNumbers = this.getGrib2Section(2); // Section 2: Local Use Section (optional)
             if (SectionNumbers.length > 1) {
+                // don't do anything!
             }
 
             SectionNumbers = this.getGrib2Section(3); // Section 3: Grid Definition Section
 
             if (SectionNumbers.length > 1) {
                 printst("Grid Definition Template Number:\t");
-                this.TypeOfProjection = U_NUMx2(SectionNumbers[13], SectionNumbers[14]);
+                this.TypeOfProjection = uNumX2(SectionNumbers[13], SectionNumbers[14]);
                 switch (this.TypeOfProjection) {
-                    case 0: GridDEF_ScanningMode = 72; println("Latitude/longitude (equidistant cylindrical)"); break;
-                    case 1: GridDEF_ScanningMode = 72; println("Rotated latitude/longitude"); break;
-                    case 2: GridDEF_ScanningMode = 72; println("Stretched latitude/longitude"); break;
-                    case 3: GridDEF_ScanningMode = 72; println("Stretched and rotated latitude/longitude"); break;
-                    case 4: GridDEF_ScanningMode = 48; println("Variable resolution latitude/longitude"); break;
-                    case 5: GridDEF_ScanningMode = 48; println("Variable resolution rotated latitude/longitude"); break;
-                    case 10: GridDEF_ScanningMode = 60; println("Mercator"); break;
-                    case 12: GridDEF_ScanningMode = 60; println("Transverse Mercator"); break;
-                    case 20: GridDEF_ScanningMode = 65; println("Polar Stereographic Projection (can be north or south)"); GridDEF_ScanningMode = 65; break;
-                    case 30: GridDEF_ScanningMode = 65; println("Lambert conformal (can be secant, tangent, conical, or bipolar)"); break;
-                    case 31: GridDEF_ScanningMode = 65; println("Albers equal area"); break;
-                    case 40: GridDEF_ScanningMode = 72; println("Gaussian latitude/longitude"); break;
-                    case 41: GridDEF_ScanningMode = 72; println("Rotated Gaussian latitude/longitude"); break;
-                    case 42: GridDEF_ScanningMode = 72; println("Stretched Gaussian latitude/longitude"); break;
-                    case 43: GridDEF_ScanningMode = 72; println("Stretched and rotated Gaussian latitude/longitude"); break;
+                    case 0: gridDefScanningMode = 72; println("Latitude/longitude (equidistant cylindrical)"); break;
+                    case 1: gridDefScanningMode = 72; println("Rotated latitude/longitude"); break;
+                    case 2: gridDefScanningMode = 72; println("Stretched latitude/longitude"); break;
+                    case 3: gridDefScanningMode = 72; println("Stretched and rotated latitude/longitude"); break;
+                    case 4: gridDefScanningMode = 48; println("Variable resolution latitude/longitude"); break;
+                    case 5: gridDefScanningMode = 48; println("Variable resolution rotated latitude/longitude"); break;
+                    case 10: gridDefScanningMode = 60; println("Mercator"); break;
+                    case 12: gridDefScanningMode = 60; println("Transverse Mercator"); break;
+                    case 20: gridDefScanningMode = 65; println("Polar Stereographic Projection (can be north or south)"); gridDefScanningMode = 65; break;
+                    case 30: gridDefScanningMode = 65; println("Lambert conformal (can be secant, tangent, conical, or bipolar)"); break;
+                    case 31: gridDefScanningMode = 65; println("Albers equal area"); break;
+                    case 40: gridDefScanningMode = 72; println("Gaussian latitude/longitude"); break;
+                    case 41: gridDefScanningMode = 72; println("Rotated Gaussian latitude/longitude"); break;
+                    case 42: gridDefScanningMode = 72; println("Stretched Gaussian latitude/longitude"); break;
+                    case 43: gridDefScanningMode = 72; println("Stretched and rotated Gaussian latitude/longitude"); break;
                     case 50: println("Spherical harmonic coefficients"); break;
                     case 51: println("Rotated spherical harmonic coefficients"); break;
                     case 52: println("Stretched spherical harmonic coefficients"); break;
                     case 53: println("Stretched and rotated spherical harmonic coefficients"); break;
-                    case 90: GridDEF_ScanningMode = 64; println("Space view perspective orthographic"); break;
-                    case 100: GridDEF_ScanningMode = 34; println("Triangular grid based on an icosahedron"); break;
-                    case 110: GridDEF_ScanningMode = 57; println("Equatorial azimuthal equidistant projection"); break;
-                    case 120: GridDEF_ScanningMode = 39; println("Azimuth-range projection"); break;
-                    case 140: GridDEF_ScanningMode = 64; println("Lambert azimuthal equal area projection"); break;
-                    case 204: GridDEF_ScanningMode = 72; println("Curvilinear orthogonal grids"); break;
+                    case 90: gridDefScanningMode = 64; println("Space view perspective orthographic"); break;
+                    case 100: gridDefScanningMode = 34; println("Triangular grid based on an icosahedron"); break;
+                    case 110: gridDefScanningMode = 57; println("Equatorial azimuthal equidistant projection"); break;
+                    case 120: gridDefScanningMode = 39; println("Azimuth-range projection"); break;
+                    case 140: gridDefScanningMode = 64; println("Lambert azimuthal equal area projection"); break;
+                    case 204: gridDefScanningMode = 72; println("Curvilinear orthogonal grids"); break;
                     case 1000: println("Cross-section grid, with points equally spaced on the horizontal"); break;
-                    case 1100: GridDEF_ScanningMode = 51; println("Hovmöller diagram grid, with points equally spaced on the horizontal"); break;
+                    case 1100: gridDefScanningMode = 51; println("Hovmöller diagram grid, with points equally spaced on the horizontal"); break;
                     case 1200: println("Time section grid"); break;
-                    case 32768: GridDEF_ScanningMode = 72; println("Rotated latitude/longitude (arakawa staggered E-grid)"); break;
-                    case 32769: GridDEF_ScanningMode = 72; println("Rotated latitude/longitude (arakawa non-E staggered grid)"); break;
+                    case 32768: gridDefScanningMode = 72; println("Rotated latitude/longitude (arakawa staggered E-grid)"); break;
+                    case 32769: gridDefScanningMode = 72; println("Rotated latitude/longitude (arakawa non-E staggered grid)"); break;
                     case 65535: println("Missing"); break;
                     default: println(this.TypeOfProjection); break;
                 }
 
                 printst("Number of data points (Nx * Ny):\t");
-                this.Np = U_NUMx4(SectionNumbers[GridDEF_NumberOfDataPoints], SectionNumbers[GridDEF_NumberOfDataPoints + 1], SectionNumbers[GridDEF_NumberOfDataPoints + 2], SectionNumbers[GridDEF_NumberOfDataPoints + 3]);
+                this.Np = uNumX4(SectionNumbers[gridDefNumberOfDataPoints], SectionNumbers[gridDefNumberOfDataPoints + 1], SectionNumbers[gridDefNumberOfDataPoints + 2], SectionNumbers[gridDefNumberOfDataPoints + 3]);
                 println(this.Np);
 
                 printst("Number of points along the X-axis:\t");
-                this.Nx = U_NUMx4(SectionNumbers[GridDEF_NumberOfPointsAlongTheXaxis], SectionNumbers[GridDEF_NumberOfPointsAlongTheXaxis + 1], SectionNumbers[GridDEF_NumberOfPointsAlongTheXaxis + 2], SectionNumbers[GridDEF_NumberOfPointsAlongTheXaxis + 3]);
+                this.Nx = uNumX4(SectionNumbers[gridDefNumberOfPointsAlongTheXaxis], SectionNumbers[gridDefNumberOfPointsAlongTheXaxis + 1], SectionNumbers[gridDefNumberOfPointsAlongTheXaxis + 2], SectionNumbers[gridDefNumberOfPointsAlongTheXaxis + 3]);
                 println(this.Nx);
 
                 printst("Number of points along the Y-axis:\t");
-                this.Ny = U_NUMx4(SectionNumbers[GridDEF_NumberOfPointsAlongTheYaxis], SectionNumbers[GridDEF_NumberOfPointsAlongTheYaxis + 1], SectionNumbers[GridDEF_NumberOfPointsAlongTheYaxis + 2], SectionNumbers[GridDEF_NumberOfPointsAlongTheYaxis + 3]);
+                this.Ny = uNumX4(SectionNumbers[gridDefNumberOfPointsAlongTheYaxis], SectionNumbers[gridDefNumberOfPointsAlongTheYaxis + 1], SectionNumbers[gridDefNumberOfPointsAlongTheYaxis + 2], SectionNumbers[gridDefNumberOfPointsAlongTheYaxis + 3]);
                 println(this.Ny);
 
                 if (this.TypeOfProjection === 0) { // Latitude/longitude
-                    this.ResolutionAndComponentFlags = SectionNumbers[GridDEF_LatLon_ResolutionAndComponentFlags];
+                    this.ResolutionAndComponentFlags = SectionNumbers[gridDefLatLonResolutionAndComponentFlags];
                     println("Resolution and component flags:\t" + this.ResolutionAndComponentFlags);
 
-                    this.La1 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 3]);
+                    this.La1 = 0.000001 * sNumX4(SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 3]);
                     println("Latitude of first grid point:\t" + this.La1);
 
-                    this.Lo1 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 3]);
+                    this.Lo1 = 0.000001 * uNumX4(SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 3]);
                     if (this.Lo1 === 180) this.Lo1 = -180;
                     println("Longitude of first grid point:\t" + this.Lo1);
 
-                    this.La2 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 1], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 2], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 3]);
+                    this.La2 = 0.000001 * sNumX4(SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 1], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 2], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 3]);
                     println("Latitude of last grid point:\t" + this.La2);
 
-                    this.Lo2 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 1], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 2], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 3]);
+                    this.Lo2 = 0.000001 * uNumX4(SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 1], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 2], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 3]);
                     if (this.Lo2 < this.Lo1) this.Lo2 += 360;
                     println("Longitude of last grid point:\t" + this.Lo2);
                 } else if (this.TypeOfProjection === 1) { // Rotated latitude/longitude
-                    this.ResolutionAndComponentFlags = SectionNumbers[GridDEF_LatLon_ResolutionAndComponentFlags];
+                    this.ResolutionAndComponentFlags = SectionNumbers[gridDefLatLonResolutionAndComponentFlags];
                     println("Resolution and component flags:\t" + this.ResolutionAndComponentFlags);
 
-                    this.La1 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_LatLon_LatitudeOfFirstGridPoint + 3]);
+                    this.La1 = 0.000001 * sNumX4(SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLatLonLatitudeOfFirstGridPoint + 3]);
                     println("Latitude of first grid point:\t" + this.La1);
 
-                    this.Lo1 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_LatLon_LongitudeOfFirstGridPoint + 3]);
+                    this.Lo1 = 0.000001 * uNumX4(SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLatLonLongitudeOfFirstGridPoint + 3]);
                     if (this.Lo1 === 180) this.Lo1 = -180;
                     println("Longitude of first grid point:\t" + this.Lo1);
 
-                    this.La2 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 1], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 2], SectionNumbers[GridDEF_LatLon_LatitudeOfLastGridPoint + 3]);
+                    this.La2 = 0.000001 * sNumX4(SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 1], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 2], SectionNumbers[gridDefLatLonLatitudeOfLastGridPoint + 3]);
                     println("Latitude of last grid point:\t" + this.La2);
 
-                    this.Lo2 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 1], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 2], SectionNumbers[GridDEF_LatLon_LongitudeOfLastGridPoint + 3]);
+                    this.Lo2 = 0.000001 * uNumX4(SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 1], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 2], SectionNumbers[gridDefLatLonLongitudeOfLastGridPoint + 3]);
                     if (this.Lo2 < this.Lo1) this.Lo2 += 360;
                     println("Longitude of last grid point:\t" + this.Lo2);
 
-                    this.SouthLat = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_LatLon_SouthPoleLatitude], SectionNumbers[GridDEF_LatLon_SouthPoleLatitude + 1], SectionNumbers[GridDEF_LatLon_SouthPoleLatitude + 2], SectionNumbers[GridDEF_LatLon_SouthPoleLatitude + 3]);
+                    this.SouthLat = 0.000001 * sNumX4(SectionNumbers[gridDefLatLonSouthPoleLatitude], SectionNumbers[gridDefLatLonSouthPoleLatitude + 1], SectionNumbers[gridDefLatLonSouthPoleLatitude + 2], SectionNumbers[gridDefLatLonSouthPoleLatitude + 3]);
                     println("Latitude of the southern pole of projection:\t" + this.SouthLat);
 
-                    this.SouthLon = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_LatLon_SouthPoleLongitude], SectionNumbers[GridDEF_LatLon_SouthPoleLongitude + 1], SectionNumbers[GridDEF_LatLon_SouthPoleLongitude + 2], SectionNumbers[GridDEF_LatLon_SouthPoleLongitude + 3]);
+                    this.SouthLon = 0.000001 * uNumX4(SectionNumbers[gridDefLatLonSouthPoleLongitude], SectionNumbers[gridDefLatLonSouthPoleLongitude + 1], SectionNumbers[gridDefLatLonSouthPoleLongitude + 2], SectionNumbers[gridDefLatLonSouthPoleLongitude + 3]);
                     println("Longitude of the southern pole of projection:\t" + this.SouthLon);
 
-                    this.Rotation = S_NUMx4(SectionNumbers[GridDEF_LatLon_RotationOfProjection], SectionNumbers[GridDEF_LatLon_RotationOfProjection + 1], SectionNumbers[GridDEF_LatLon_RotationOfProjection + 2], SectionNumbers[GridDEF_LatLon_RotationOfProjection + 3]);
+                    this.Rotation = sNumX4(SectionNumbers[gridDefLatLonRotationOfProjection], SectionNumbers[gridDefLatLonRotationOfProjection + 1], SectionNumbers[gridDefLatLonRotationOfProjection + 2], SectionNumbers[gridDefLatLonRotationOfProjection + 3]);
                     println("Angle of rotation of projection:\t" + this.Rotation);
                 } else if (this.TypeOfProjection === 20) { // Polar Stereographic Projection
-                    this.ResolutionAndComponentFlags = SectionNumbers[GridDEF_Polar_ResolutionAndComponentFlags];
+                    this.ResolutionAndComponentFlags = SectionNumbers[gridDefPolarResolutionAndComponentFlags];
                     println("Resolution and component flags:\t" + this.ResolutionAndComponentFlags);
 
-                    this.La1 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Polar_LatitudeOfFirstGridPoint], SectionNumbers[GridDEF_Polar_LatitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_Polar_LatitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_Polar_LatitudeOfFirstGridPoint + 3]);
+                    this.La1 = 0.000001 * sNumX4(SectionNumbers[gridDefPolarLatitudeOfFirstGridPoint], SectionNumbers[gridDefPolarLatitudeOfFirstGridPoint + 1], SectionNumbers[gridDefPolarLatitudeOfFirstGridPoint + 2], SectionNumbers[gridDefPolarLatitudeOfFirstGridPoint + 3]);
                     println("Latitude of first grid point:\t" + this.La1);
 
-                    this.Lo1 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Polar_LongitudeOfFirstGridPoint], SectionNumbers[GridDEF_Polar_LongitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_Polar_LongitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_Polar_LongitudeOfFirstGridPoint + 3]);
+                    this.Lo1 = 0.000001 * uNumX4(SectionNumbers[gridDefPolarLongitudeOfFirstGridPoint], SectionNumbers[gridDefPolarLongitudeOfFirstGridPoint + 1], SectionNumbers[gridDefPolarLongitudeOfFirstGridPoint + 2], SectionNumbers[gridDefPolarLongitudeOfFirstGridPoint + 3]);
                     println("Longitude of first grid point:\t" + this.Lo1);
 
-                    this.LaD = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Polar_DeclinationOfTheGrid], SectionNumbers[GridDEF_Polar_DeclinationOfTheGrid + 1], SectionNumbers[GridDEF_Polar_DeclinationOfTheGrid + 2], SectionNumbers[GridDEF_Polar_DeclinationOfTheGrid + 3]);
+                    this.LaD = 0.000001 * sNumX4(SectionNumbers[gridDefPolarDeclinationOfTheGrid], SectionNumbers[gridDefPolarDeclinationOfTheGrid + 1], SectionNumbers[gridDefPolarDeclinationOfTheGrid + 2], SectionNumbers[gridDefPolarDeclinationOfTheGrid + 3]);
                     println("Latitude where Dx and Dy are specified:\t" + this.LaD);
 
-                    this.LoV = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Polar_OrientationOfTheGrid], SectionNumbers[GridDEF_Polar_OrientationOfTheGrid + 1], SectionNumbers[GridDEF_Polar_OrientationOfTheGrid + 2], SectionNumbers[GridDEF_Polar_OrientationOfTheGrid + 3]);
+                    this.LoV = 0.000001 * uNumX4(SectionNumbers[gridDefPolarOrientationOfTheGrid], SectionNumbers[gridDefPolarOrientationOfTheGrid + 1], SectionNumbers[gridDefPolarOrientationOfTheGrid + 2], SectionNumbers[gridDefPolarOrientationOfTheGrid + 3]);
                     println("Orientation of the grid:\t" + this.LoV);
 
-                    this.Dx = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Polar_XDirectionGridLength], SectionNumbers[GridDEF_Polar_XDirectionGridLength + 1], SectionNumbers[GridDEF_Polar_XDirectionGridLength + 2], SectionNumbers[GridDEF_Polar_XDirectionGridLength + 3]);
+                    this.Dx = 0.000001 * uNumX4(SectionNumbers[gridDefPolarXDirectionGridLength], SectionNumbers[gridDefPolarXDirectionGridLength + 1], SectionNumbers[gridDefPolarXDirectionGridLength + 2], SectionNumbers[gridDefPolarXDirectionGridLength + 3]);
                     println("X-direction grid length (km):\t" + this.Dx);
 
-                    this.Dy = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Polar_YDirectionGridLength], SectionNumbers[GridDEF_Polar_YDirectionGridLength + 1], SectionNumbers[GridDEF_Polar_YDirectionGridLength + 2], SectionNumbers[GridDEF_Polar_YDirectionGridLength + 3]);
+                    this.Dy = 0.000001 * uNumX4(SectionNumbers[gridDefPolarYDirectionGridLength], SectionNumbers[gridDefPolarYDirectionGridLength + 1], SectionNumbers[gridDefPolarYDirectionGridLength + 2], SectionNumbers[gridDefPolarYDirectionGridLength + 3]);
                     println("Y-direction grid length (km):\t" + this.Dy);
 
-                    this.PCF = SectionNumbers[GridDEF_Polar_ProjectionCenterFlag];
+                    this.PCF = SectionNumbers[gridDefPolarProjectionCenterFlag];
                     println("Projection center flag:\t" + this.PCF);
                 } else if (this.TypeOfProjection === 30) { // Lambert Conformal Projection
-                    this.ResolutionAndComponentFlags = SectionNumbers[GridDEF_Lambert_ResolutionAndComponentFlags];
+                    this.ResolutionAndComponentFlags = SectionNumbers[gridDefLambertResolutionAndComponentFlags];
                     println("Resolution and component flags:\t" + this.ResolutionAndComponentFlags);
 
-                    this.La1 = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Lambert_LatitudeOfFirstGridPoint], SectionNumbers[GridDEF_Lambert_LatitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_Lambert_LatitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_Lambert_LatitudeOfFirstGridPoint + 3]);
+                    this.La1 = 0.000001 * sNumX4(SectionNumbers[gridDefLambertLatitudeOfFirstGridPoint], SectionNumbers[gridDefLambertLatitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLambertLatitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLambertLatitudeOfFirstGridPoint + 3]);
                     println("Latitude of first grid point:\t" + this.La1);
 
-                    this.Lo1 = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Lambert_LongitudeOfFirstGridPoint], SectionNumbers[GridDEF_Lambert_LongitudeOfFirstGridPoint + 1], SectionNumbers[GridDEF_Lambert_LongitudeOfFirstGridPoint + 2], SectionNumbers[GridDEF_Lambert_LongitudeOfFirstGridPoint + 3]);
+                    this.Lo1 = 0.000001 * uNumX4(SectionNumbers[gridDefLambertLongitudeOfFirstGridPoint], SectionNumbers[gridDefLambertLongitudeOfFirstGridPoint + 1], SectionNumbers[gridDefLambertLongitudeOfFirstGridPoint + 2], SectionNumbers[gridDefLambertLongitudeOfFirstGridPoint + 3]);
                     println("Longitude of first grid point:\t" + this.Lo1);
 
-                    this.LaD = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Lambert_DeclinationOfTheGrid], SectionNumbers[GridDEF_Lambert_DeclinationOfTheGrid + 1], SectionNumbers[GridDEF_Lambert_DeclinationOfTheGrid + 2], SectionNumbers[GridDEF_Lambert_DeclinationOfTheGrid + 3]);
+                    this.LaD = 0.000001 * sNumX4(SectionNumbers[gridDefLambertDeclinationOfTheGrid], SectionNumbers[gridDefLambertDeclinationOfTheGrid + 1], SectionNumbers[gridDefLambertDeclinationOfTheGrid + 2], SectionNumbers[gridDefLambertDeclinationOfTheGrid + 3]);
                     println("Latitude where Dx and Dy are specified:\t" + this.LaD);
 
-                    this.LoV = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Lambert_OrientationOfTheGrid], SectionNumbers[GridDEF_Lambert_OrientationOfTheGrid + 1], SectionNumbers[GridDEF_Lambert_OrientationOfTheGrid + 2], SectionNumbers[GridDEF_Lambert_OrientationOfTheGrid + 3]);
+                    this.LoV = 0.000001 * uNumX4(SectionNumbers[gridDefLambertOrientationOfTheGrid], SectionNumbers[gridDefLambertOrientationOfTheGrid + 1], SectionNumbers[gridDefLambertOrientationOfTheGrid + 2], SectionNumbers[gridDefLambertOrientationOfTheGrid + 3]);
                     println("Orientation of the grid:\t" + this.LoV);
 
-                    this.Dx = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Lambert_XDirectionGridLength], SectionNumbers[GridDEF_Lambert_XDirectionGridLength + 1], SectionNumbers[GridDEF_Lambert_XDirectionGridLength + 2], SectionNumbers[GridDEF_Lambert_XDirectionGridLength + 3]);
+                    this.Dx = 0.000001 * uNumX4(SectionNumbers[gridDefLambertXDirectionGridLength], SectionNumbers[gridDefLambertXDirectionGridLength + 1], SectionNumbers[gridDefLambertXDirectionGridLength + 2], SectionNumbers[gridDefLambertXDirectionGridLength + 3]);
                     println("X-direction grid length (km):\t" + this.Dx);
 
-                    this.Dy = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Lambert_YDirectionGridLength], SectionNumbers[GridDEF_Lambert_YDirectionGridLength + 1], SectionNumbers[GridDEF_Lambert_YDirectionGridLength + 2], SectionNumbers[GridDEF_Lambert_YDirectionGridLength + 3]);
+                    this.Dy = 0.000001 * uNumX4(SectionNumbers[gridDefLambertYDirectionGridLength], SectionNumbers[gridDefLambertYDirectionGridLength + 1], SectionNumbers[gridDefLambertYDirectionGridLength + 2], SectionNumbers[gridDefLambertYDirectionGridLength + 3]);
                     println("Y-direction grid length (km):\t" + this.Dy);
 
-                    this.PCF = SectionNumbers[GridDEF_Lambert_ProjectionCenterFlag];
+                    this.PCF = SectionNumbers[gridDefLambertProjectionCenterFlag];
                     println("Projection center flag:\t" + this.PCF);
 
-                    this.FirstLatIn = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Lambert_1stLatitudeIn], SectionNumbers[GridDEF_Lambert_1stLatitudeIn + 1], SectionNumbers[GridDEF_Lambert_1stLatitudeIn + 2], SectionNumbers[GridDEF_Lambert_1stLatitudeIn + 3]);
+                    this.FirstLatIn = 0.000001 * sNumX4(SectionNumbers[gridDefLambert1stLatitudeIn], SectionNumbers[gridDefLambert1stLatitudeIn + 1], SectionNumbers[gridDefLambert1stLatitudeIn + 2], SectionNumbers[gridDefLambert1stLatitudeIn + 3]);
                     println("First latitude from the pole at which the secant cone cuts the sphere:\t" + this.FirstLatIn);
 
-                    this.SecondLatIn = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Lambert_2ndLatitudeIn], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 1], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 2], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 3]);
+                    this.SecondLatIn = 0.000001 * sNumX4(SectionNumbers[gridDefLambert2ndLatitudeIn], SectionNumbers[gridDefLambert2ndLatitudeIn + 1], SectionNumbers[gridDefLambert2ndLatitudeIn + 2], SectionNumbers[gridDefLambert2ndLatitudeIn + 3]);
                     println("Second latitude from the pole at which the secant cone cuts the sphere:\t" + this.SecondLatIn);
 
-                    this.SouthLat = 0.000001 * S_NUMx4(SectionNumbers[GridDEF_Lambert_2ndLatitudeIn], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 1], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 2], SectionNumbers[GridDEF_Lambert_2ndLatitudeIn + 3]);
+                    this.SouthLat = 0.000001 * sNumX4(SectionNumbers[gridDefLambert2ndLatitudeIn], SectionNumbers[gridDefLambert2ndLatitudeIn + 1], SectionNumbers[gridDefLambert2ndLatitudeIn + 2], SectionNumbers[gridDefLambert2ndLatitudeIn + 3]);
                     println("Latitude of the southern pole of projection:\t" + this.SouthLat);
 
-                    this.SouthLon = 0.000001 * U_NUMx4(SectionNumbers[GridDEF_Lambert_SouthPoleLongitude], SectionNumbers[GridDEF_Lambert_SouthPoleLongitude + 1], SectionNumbers[GridDEF_Lambert_SouthPoleLongitude + 2], SectionNumbers[GridDEF_Lambert_SouthPoleLongitude + 3]);
+                    this.SouthLon = 0.000001 * uNumX4(SectionNumbers[gridDefLambertSouthPoleLongitude], SectionNumbers[gridDefLambertSouthPoleLongitude + 1], SectionNumbers[gridDefLambertSouthPoleLongitude + 2], SectionNumbers[gridDefLambertSouthPoleLongitude + 3]);
                     println("Longitude of the southern pole of projection:\t" + this.SouthLon);
                 }
 
@@ -670,7 +673,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                 }
 
                 printst("Scanning mode:\t");
-                this.ScanningMode = SectionNumbers[GridDEF_ScanningMode];
+                this.ScanningMode = SectionNumbers[gridDefScanningMode];
                 println(this.ScanningMode);
 
                 this.ScanX = 1;
@@ -711,11 +714,11 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
             if (SectionNumbers.length > 1) {
                 printst("Number of coordinate values after Template:\t");
-                this.NumberOfCoordinateValuesAfterTemplate = U_NUMx2(SectionNumbers[6], SectionNumbers[7]);
+                this.NumberOfCoordinateValuesAfterTemplate = uNumX2(SectionNumbers[6], SectionNumbers[7]);
                 println(this.NumberOfCoordinateValuesAfterTemplate);
 
                 printst("Number of coordinate values after Template:\t");
-                this.ProductDefinitionTemplateNumber = U_NUMx2(SectionNumbers[8], SectionNumbers[9]);
+                this.ProductDefinitionTemplateNumber = uNumX2(SectionNumbers[8], SectionNumbers[9]);
                 info.ProductDefinitionTemplateNumber(lThis);
 
                 printst("Category of parameters by product discipline:\t");
@@ -858,30 +861,30 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                 }
 
                 printst("Forecast time in defined units:\t");
-                this.ForecastTimeInDefinedUnits = U_NUMx4(SectionNumbers[19], SectionNumbers[20], SectionNumbers[21], SectionNumbers[22]);
+                this.ForecastTimeInDefinedUnits = uNumX4(SectionNumbers[19], SectionNumbers[20], SectionNumbers[21], SectionNumbers[22]);
 
                 if (this.ProductDefinitionTemplateNumber === 8) { // Average, accumulation, extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval. (see Template 4.8)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[50], SectionNumbers[51], SectionNumbers[52], SectionNumbers[53]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[50], SectionNumbers[51], SectionNumbers[52], SectionNumbers[53]);
                 } else if (this.ProductDefinitionTemplateNumber === 9) { // Probability forecasts at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval. (see Template 4.9)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[63], SectionNumbers[64], SectionNumbers[65], SectionNumbers[66]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[63], SectionNumbers[64], SectionNumbers[65], SectionNumbers[66]);
                 } else if (this.ProductDefinitionTemplateNumber === 10) { // Percentile forecasts at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval. (see Template 4.10)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[51], SectionNumbers[52], SectionNumbers[53], SectionNumbers[54]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[51], SectionNumbers[52], SectionNumbers[53], SectionNumbers[54]);
                 } else if (this.ProductDefinitionTemplateNumber === 11) { // Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval. (see Template 4.11)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[53], SectionNumbers[54], SectionNumbers[55], SectionNumbers[56]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[53], SectionNumbers[54], SectionNumbers[55], SectionNumbers[56]);
                 } else if (this.ProductDefinitionTemplateNumber === 12) { // Derived forecasts based on all ensemble members at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval. (see Template 4.12)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[52], SectionNumbers[53], SectionNumbers[54], SectionNumbers[55]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[52], SectionNumbers[53], SectionNumbers[54], SectionNumbers[55]);
                 } else if (this.ProductDefinitionTemplateNumber === 13) { // Derived forecasts based on a cluster of ensemble members over a rectangular area at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval. (see Template 4.13)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[84], SectionNumbers[85], SectionNumbers[86], SectionNumbers[87]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[84], SectionNumbers[85], SectionNumbers[86], SectionNumbers[87]);
                 } else if (this.ProductDefinitionTemplateNumber === 14) { // Derived forecasts based on a cluster of ensemble members over a circular area at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval. (see Template 4.14)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[80], SectionNumbers[81], SectionNumbers[82], SectionNumbers[83]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[80], SectionNumbers[81], SectionNumbers[82], SectionNumbers[83]);
                 } else if (this.ProductDefinitionTemplateNumber === 42) { // Average, accumulation, and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for atmospheric chemical constituents. (see Template 4.42)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[52], SectionNumbers[53], SectionNumbers[54], SectionNumbers[55]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[52], SectionNumbers[53], SectionNumbers[54], SectionNumbers[55]);
                 } else if (this.ProductDefinitionTemplateNumber === 43) { // Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval for atmospheric chemical constituents. (see Template 4.43)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[55], SectionNumbers[56], SectionNumbers[57], SectionNumbers[58]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[55], SectionNumbers[56], SectionNumbers[57], SectionNumbers[58]);
                 } else if (this.ProductDefinitionTemplateNumber === 46) { // Average, accumulation, and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for aerosol. (see Template 4.46)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[63], SectionNumbers[64], SectionNumbers[65], SectionNumbers[66]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[63], SectionNumbers[64], SectionNumbers[65], SectionNumbers[66]);
                 } else if (this.ProductDefinitionTemplateNumber === 47) { // Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval for aerosol. (see Template 4.47)
-                    this.ForecastTimeInDefinedUnits += U_NUMx4(SectionNumbers[66], SectionNumbers[67], SectionNumbers[68], SectionNumbers[69]);
+                    this.ForecastTimeInDefinedUnits += uNumX4(SectionNumbers[66], SectionNumbers[67], SectionNumbers[68], SectionNumbers[69]);
                 }
                 println(this.ForecastTimeInDefinedUnits);
 
@@ -896,23 +899,23 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
             if (SectionNumbers.length > 1) {
                 printst("Number of data points:\t");
-                this.NumberOfDataPoints = U_NUMx4(SectionNumbers[6], SectionNumbers[7], SectionNumbers[8], SectionNumbers[9]);
+                this.NumberOfDataPoints = uNumX4(SectionNumbers[6], SectionNumbers[7], SectionNumbers[8], SectionNumbers[9]);
                 println(this.NumberOfDataPoints);
 
                 printst("Data Representation Template Number:\t");
-                this.DataRepresentationTemplateNumber = U_NUMx2(SectionNumbers[10], SectionNumbers[11]);
+                this.DataRepresentationTemplateNumber = uNumX2(SectionNumbers[10], SectionNumbers[11]);
                 info.DataRepresentationTemplateNumber(lThis);
 
                 printst("Reference value (R):\t");
-                this.ReferenceValue = IEEE32(IntToBinary32(U_NUMx4(SectionNumbers[12], SectionNumbers[13], SectionNumbers[14], SectionNumbers[15])));
+                this.ReferenceValue = IEEE32(IntToBinary32(uNumX4(SectionNumbers[12], SectionNumbers[13], SectionNumbers[14], SectionNumbers[15])));
                 println(this.ReferenceValue);
 
                 printst("Binary Scale Factor (E):\t");
-                this.BinaryScaleFactor = S_NUMx2(SectionNumbers[16], SectionNumbers[17]);
+                this.BinaryScaleFactor = sNumX2(SectionNumbers[16], SectionNumbers[17]);
                 println(this.BinaryScaleFactor);
 
                 printst("Decimal Scale Factor (D):\t");
-                this.DecimalScaleFactor = S_NUMx2(SectionNumbers[18], SectionNumbers[19]);
+                this.DecimalScaleFactor = sNumX2(SectionNumbers[18], SectionNumbers[19]);
                 println(this.DecimalScaleFactor);
 
                 printst("Number of bits used for each packed value:\t");
@@ -920,97 +923,97 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                 println(this.NumberOfBitsUsedForEachPackedValue);
 
                 printst("Type of original field values:\t");
-                JPEG2000_TypeOfOriginalFieldValues = SectionNumbers[21];
-                switch (JPEG2000_TypeOfOriginalFieldValues) {
+                jpeg2000TypeOfOriginalFieldValues = SectionNumbers[21];
+                switch (jpeg2000TypeOfOriginalFieldValues) {
                     case 0: println("Floating point"); break;
                     case 1: println("Integer"); break;
                     case 255: println("Missing"); break;
-                    default: println(JPEG2000_TypeOfOriginalFieldValues); break;
+                    default: println(jpeg2000TypeOfOriginalFieldValues); break;
                 }
 
                 // parameters over 21 used in Complex Packings e.g JPEG-2000
-                JPEG2000_TypeOfCompression = -1;
-                JPEG2000_TargetCompressionRatio = -1;
+                jpeg2000TypeOfCompression = -1;
+                jpeg2000TargetCompressionRatio = -1;
                 if (this.DataRepresentationTemplateNumber === 40) { // Grid point data – JPEG 2000 Code Stream Format
                     printst("JPEG-2000/Type of Compression:\t");
-                    JPEG2000_TypeOfCompression = SectionNumbers[22];
-                    switch (JPEG2000_TypeOfCompression) {
+                    jpeg2000TypeOfCompression = SectionNumbers[22];
+                    switch (jpeg2000TypeOfCompression) {
                         case 0: println("Lossless"); break;
                         case 1: println("Lossy"); break;
                         case 255: println("Missing"); break;
-                        default: println(JPEG2000_TypeOfCompression); break;
+                        default: println(jpeg2000TypeOfCompression); break;
                     }
 
                     printst("JPEG-2000/Target compression ratio (M):\t");
-                    JPEG2000_TargetCompressionRatio = SectionNumbers[23];
-                    println(JPEG2000_TargetCompressionRatio);
+                    jpeg2000TargetCompressionRatio = SectionNumbers[23];
+                    println(jpeg2000TargetCompressionRatio);
                     //The compression ratio M:1 (e.g. 20:1) specifies that the encoded stream should be less than ((1/M) x depth x number of data points) bits,
                     //where depth is specified in octet 20 and number of data points is specified in octets 6-9 of the Data Representation Section.
                 } else if ((this.DataRepresentationTemplateNumber === 2) || // Grid point data - complex packing
                     (this.DataRepresentationTemplateNumber === 3)) { // Grid point data - complex packing and spatial differencing
                     printst("ComplexPacking/Type of Compression:\t");
-                    ComplexPacking_GroupSplittingMethodUsed = SectionNumbers[22];
-                    switch (ComplexPacking_GroupSplittingMethodUsed) {
+                    ComplexPackingGroupSplittingMethodUsed = SectionNumbers[22];
+                    switch (ComplexPackingGroupSplittingMethodUsed) {
                         case 0: println("Row by row splitting"); break;
                         case 1: println("General group splitting"); break;
                         case 255: println("Missing"); break;
-                        default: println(ComplexPacking_GroupSplittingMethodUsed); break;
+                        default: println(ComplexPackingGroupSplittingMethodUsed); break;
                     }
 
                     printst("ComplexPacking/Missing value management used:\t");
-                    ComplexPacking_MissingValueManagementUsed = SectionNumbers[23];
-                    switch (ComplexPacking_MissingValueManagementUsed) {
+                    ComplexPackingMissingValueManagementUsed = SectionNumbers[23];
+                    switch (ComplexPackingMissingValueManagementUsed) {
                         case 0: println("No explicit missing values included within data values"); break;
                         case 1: println("Primary missing values included within data values"); break;
                         case 2: println("Primary and secondary missing values included within data values"); break;
                         case 255: println("Missing"); break;
-                        default: println(ComplexPacking_MissingValueManagementUsed); break;
+                        default: println(ComplexPackingMissingValueManagementUsed); break;
                     }
 
                     printst("ComplexPacking/Primary missing value substitute:\t");
-                    ComplexPacking_PrimaryMissingValueSubstitute = IEEE32(IntToBinary32(U_NUMx4(SectionNumbers[24], SectionNumbers[25], SectionNumbers[26], SectionNumbers[27])));
-                    println(ComplexPacking_PrimaryMissingValueSubstitute);
+                    ComplexPackingPrimaryMissingValueSubstitute = IEEE32(IntToBinary32(uNumX4(SectionNumbers[24], SectionNumbers[25], SectionNumbers[26], SectionNumbers[27])));
+                    println(ComplexPackingPrimaryMissingValueSubstitute);
 
                     printst("ComplexPacking/Secondary missing value substitute:\t");
-                    ComplexPacking_SecondaryMissingValueSubstitute = IEEE32(IntToBinary32(U_NUMx4(SectionNumbers[28], SectionNumbers[29], SectionNumbers[30], SectionNumbers[31])));
-                    println(ComplexPacking_SecondaryMissingValueSubstitute);
+                    ComplexPackingSecondaryMissingValueSubstitute = IEEE32(IntToBinary32(uNumX4(SectionNumbers[28], SectionNumbers[29], SectionNumbers[30], SectionNumbers[31])));
+                    println(ComplexPackingSecondaryMissingValueSubstitute);
 
                     printst("ComplexPacking/Number of groups of data values into which field is split:\t");
-                    ComplexPacking_NumberOfGroupsOfDataValues = U_NUMx4(SectionNumbers[32], SectionNumbers[33], SectionNumbers[34], SectionNumbers[35]);
-                    println(ComplexPacking_NumberOfGroupsOfDataValues);
+                    ComplexPackingNumberOfGroupsOfDataValues = uNumX4(SectionNumbers[32], SectionNumbers[33], SectionNumbers[34], SectionNumbers[35]);
+                    println(ComplexPackingNumberOfGroupsOfDataValues);
 
                     printst("ComplexPacking/Reference for group widths:\t");
-                    ComplexPacking_ReferenceForGroupWidths = SectionNumbers[36];
-                    println(ComplexPacking_ReferenceForGroupWidths);
+                    ComplexPackingReferenceForGroupWidths = SectionNumbers[36];
+                    println(ComplexPackingReferenceForGroupWidths);
 
                     printst("ComplexPacking/Number of bits used for group widths:\t");
-                    ComplexPacking_NumberOfBitsUsedForGroupWidths = SectionNumbers[37];
-                    println(ComplexPacking_NumberOfBitsUsedForGroupWidths);
+                    ComplexPackingNumberOfBitsUsedForGroupWidths = SectionNumbers[37];
+                    println(ComplexPackingNumberOfBitsUsedForGroupWidths);
 
                     printst("ComplexPacking/Reference for group lengths:\t");
-                    ComplexPacking_ReferenceForGroupLengths = U_NUMx4(SectionNumbers[38], SectionNumbers[39], SectionNumbers[40], SectionNumbers[41]);
-                    println(ComplexPacking_ReferenceForGroupLengths);
+                    ComplexPackingReferenceForGroupLengths = uNumX4(SectionNumbers[38], SectionNumbers[39], SectionNumbers[40], SectionNumbers[41]);
+                    println(ComplexPackingReferenceForGroupLengths);
 
                     printst("ComplexPacking/Length increment for the group lengths:\t");
-                    ComplexPacking_LengthIncrementForTheGroupLengths = SectionNumbers[42];
-                    println(ComplexPacking_LengthIncrementForTheGroupLengths);
+                    ComplexPackingLengthIncrementForTheGroupLengths = SectionNumbers[42];
+                    println(ComplexPackingLengthIncrementForTheGroupLengths);
 
                     printst("ComplexPacking/True length of last group:\t");
-                    ComplexPacking_TrueLengthOfLastGroup = U_NUMx4(SectionNumbers[43], SectionNumbers[44], SectionNumbers[45], SectionNumbers[46]);
-                    println(ComplexPacking_TrueLengthOfLastGroup);
+                    ComplexPackingTrueLengthOfLastGroup = uNumX4(SectionNumbers[43], SectionNumbers[44], SectionNumbers[45], SectionNumbers[46]);
+                    println(ComplexPackingTrueLengthOfLastGroup);
 
                     printst("ComplexPacking/Number of bits used for the scaled group lengths:\t");
-                    ComplexPacking_NumberOfBitsUsedForTheScaledGroupLengths = SectionNumbers[47];
-                    println(ComplexPacking_NumberOfBitsUsedForTheScaledGroupLengths);
+                    ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths = SectionNumbers[47];
+                    println(ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths);
 
                     if (this.DataRepresentationTemplateNumber === 3) { // Grid point data - complex packing and spatial differencing
                         printst("ComplexPacking/Order of Spatial Differencing:\t");
-                        ComplexPacking_OrderOfSpatialDifferencing = SectionNumbers[48];
-                        println(ComplexPacking_OrderOfSpatialDifferencing);
+                        ComplexPackingOrderOfSpatialDifferencing = SectionNumbers[48];
+                        println(ComplexPackingOrderOfSpatialDifferencing);
 
                         printst("ComplexPacking/Number of octets required in the Data Section to specify the extra descriptors:\t");
-                        ComplexPacking_NumberOfExtraOctetsRequiredInDataSection = SectionNumbers[49];
-                        println(ComplexPacking_NumberOfExtraOctetsRequiredInDataSection);
+                        ComplexPackingNumberOfExtraOctetsRequiredInDataSection = SectionNumbers[49];
+                        println(ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                     }
                 }
             }
@@ -1050,14 +1053,14 @@ module.exports = function /* class */ GRIB2CLASS(options) {
             }
 
             if (this.DataRepresentationTemplateNumber === 40) { // Grid point data – JPEG 2000 Code Stream Format
-                Bitmap_beginPointer = nPointer + 6;
+                BitmapBeginPointer = nPointer + 6;
 
                 SectionNumbers = this.getGrib2Section(7); // Section 7: Data Section
 
                 if (SectionNumbers.length > 100) { // ???????? to handle the case of no bitmap
-                    Bitmap_endPointer = nPointer;
+                    BitmapEndPointer = nPointer;
 
-                    var n = Bitmap_beginPointer;
+                    var n = BitmapBeginPointer;
 
                     println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 4F : Marker Start of codestream
                     n += 2;
@@ -1065,137 +1068,137 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                     println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 51 : Marker Image and tile size
                     n += 2;
 
-                    JPEG2000_Lsiz = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Lsiz =", JPEG2000_Lsiz);  // Lsiz : Length of marker segment in bytes (not including the marker)
+                    jpeg2000Lsiz = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Lsiz =", jpeg2000Lsiz);  // Lsiz : Length of marker segment in bytes (not including the marker)
                     n += 2;
 
-                    JPEG2000_Rsiz = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Rsiz =", JPEG2000_Rsiz);  // Rsiz : Denotes capabilities that a decoder needs to properly decode the codestream
+                    jpeg2000Rsiz = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Rsiz =", jpeg2000Rsiz);  // Rsiz : Denotes capabilities that a decoder needs to properly decode the codestream
                     n += 2;
                     printst("\t");
-                    switch (JPEG2000_Rsiz) {
+                    switch (jpeg2000Rsiz) {
                         case 0: println("Capabilities specified in this Recommendation | International Standard only"); break;
                         case 1: println("Codestream restricted as described for Profile 0 from Table A.45"); break;
                         case 2: println("Codestream restricted as described for Profile 1 from Table A.45"); break;
                         default: println("Reserved"); break;
                     }
 
-                    JPEG2000_Xsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("Xsiz =", JPEG2000_Xsiz);  // Xsiz : Width of the reference grid
+                    jpeg2000Xsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("Xsiz =", jpeg2000Xsiz);  // Xsiz : Width of the reference grid
                     n += 4;
 
-                    JPEG2000_Ysiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("Ysiz =", JPEG2000_Ysiz);  // Ysiz : Height of the reference grid
+                    jpeg2000Ysiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("Ysiz =", jpeg2000Ysiz);  // Ysiz : Height of the reference grid
                     n += 4;
 
-                    JPEG2000_XOsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("XOsiz =", JPEG2000_XOsiz);  // XOsiz : Horizontal offset from the origin of the reference grid to the left side of the image area
+                    jpeg2000XOsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("XOsiz =", jpeg2000XOsiz);  // XOsiz : Horizontal offset from the origin of the reference grid to the left side of the image area
                     n += 4;
 
-                    JPEG2000_YOsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("YOsiz =", JPEG2000_YOsiz);  // YOsiz : Vertical offset from the origin of the reference grid to the top side of the image area
+                    jpeg2000YOsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("YOsiz =", jpeg2000YOsiz);  // YOsiz : Vertical offset from the origin of the reference grid to the top side of the image area
                     n += 4;
 
-                    JPEG2000_XTsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("XTsiz =", JPEG2000_XTsiz);  // XTsiz : Width of one reference tile with respect to the reference grid
+                    jpeg2000XTsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("XTsiz =", jpeg2000XTsiz);  // XTsiz : Width of one reference tile with respect to the reference grid
                     n += 4;
 
-                    JPEG2000_YTsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("YTsiz =", JPEG2000_YTsiz);  // YTsiz : Height of one reference tile with respect to the reference grid
+                    jpeg2000YTsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("YTsiz =", jpeg2000YTsiz);  // YTsiz : Height of one reference tile with respect to the reference grid
                     n += 4;
 
-                    JPEG2000_XTOsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("XTOsiz =", JPEG2000_XTOsiz);  // XTOsiz : Horizontal offset from the origin of the reference grid to the left side of the first tile
+                    jpeg2000XTOsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("XTOsiz =", jpeg2000XTOsiz);  // XTOsiz : Horizontal offset from the origin of the reference grid to the left side of the first tile
                     n += 4;
 
-                    JPEG2000_YTOsiz = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("YTOsiz =", JPEG2000_YTOsiz);  // YTOsiz : Vertical offset from the origin of the reference grid to the top side of the first tile
+                    jpeg2000YTOsiz = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("YTOsiz =", jpeg2000YTOsiz);  // YTOsiz : Vertical offset from the origin of the reference grid to the top side of the first tile
                     n += 4;
 
-                    JPEG2000_Csiz = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Csiz =", JPEG2000_Csiz);  // Csiz : Number of components in the image
+                    jpeg2000Csiz = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Csiz =", jpeg2000Csiz);  // Csiz : Number of components in the image
                     n += 2;
 
-                    JPEG2000_Ssiz = this.fileBytes[n];
-                    println("Ssiz =", JPEG2000_Ssiz);  // Ssiz : Precision (depth) in bits and sign of the ith component samples
+                    jpeg2000Ssiz = this.fileBytes[n];
+                    println("Ssiz =", jpeg2000Ssiz);  // Ssiz : Precision (depth) in bits and sign of the ith component samples
                     n += 1;
 
-                    JPEG2000_XRsiz = this.fileBytes[n];
-                    println("XRsiz =", JPEG2000_XRsiz);  // XRsiz : Horizontal separation of a sample of ith component with respect to the reference grid. There is one occurrence of this parameter for each component
+                    jpeg2000XRsiz = this.fileBytes[n];
+                    println("XRsiz =", jpeg2000XRsiz);  // XRsiz : Horizontal separation of a sample of ith component with respect to the reference grid. There is one occurrence of this parameter for each component
                     n += 1;
 
-                    JPEG2000_YRsiz = this.fileBytes[n];
-                    println("YRsiz =", JPEG2000_YRsiz);  // YRsiz : Vertical separation of a sample of ith component with respect to the reference grid. There is one occurrence of this parameter for each component.
+                    jpeg2000YRsiz = this.fileBytes[n];
+                    println("YRsiz =", jpeg2000YRsiz);  // YRsiz : Vertical separation of a sample of ith component with respect to the reference grid. There is one occurrence of this parameter for each component.
                     n += 1;
 
                     if ((this.fileBytes[n] === -1) && (this.fileBytes[n + 1] === 100)) { // the case of optional Comment
                         println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 64 : Marker Comment
                         n += 2;
 
-                        JPEG2000_Lcom = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                        println("Lcom =", JPEG2000_Lcom);  // Lcom : Length of marker segment in bytes (not including the marker)
+                        jpeg2000Lcom = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                        println("Lcom =", jpeg2000Lcom);  // Lcom : Length of marker segment in bytes (not including the marker)
                         n += 2;
 
-                        JPEG2000_Rcom = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                        println("Rcom =", JPEG2000_Rcom);  // Rcom : Registration value of the marker segment
+                        jpeg2000Rcom = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                        println("Rcom =", jpeg2000Rcom);  // Rcom : Registration value of the marker segment
                         n += 2;
 
                         printst("Comment: ");
-                        for (var i = 0; i < JPEG2000_Lcom - 4; i++) {
+                        for (var i = 0; i < jpeg2000Lcom - 4; i++) {
                             cout(this.fileBytes[n]);
                             n += 1;
                         }
                         println();
                     }
 
-                    println("numXtiles:", (JPEG2000_Xsiz - JPEG2000_XTOsiz) / JPEG2000_XTsiz);
-                    println("numYtiles:", (JPEG2000_Ysiz - JPEG2000_YTOsiz) / JPEG2000_YTsiz);
+                    println("numXtiles:", (jpeg2000Xsiz - jpeg2000XTOsiz) / jpeg2000XTsiz);
+                    println("numYtiles:", (jpeg2000Ysiz - jpeg2000YTOsiz) / jpeg2000YTsiz);
 
                     println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 52 : Marker Coding style default
                     n += 2;
 
-                    JPEG2000_Lcod = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Lcod =", JPEG2000_Lcod);  // Lcod : Length of marker segment in bytes (not including the marker)
+                    jpeg2000Lcod = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Lcod =", jpeg2000Lcod);  // Lcod : Length of marker segment in bytes (not including the marker)
                     n += 2;
 
-                    JPEG2000_Scod = this.fileBytes[n];
-                    println("Scod =", JPEG2000_Scod);  // Scod : Coding style for all components
+                    jpeg2000Scod = this.fileBytes[n];
+                    println("Scod =", jpeg2000Scod);  // Scod : Coding style for all components
                     n += 1;
 
                     // SGcod : Parameters for coding style designated in Scod. The parameters are independent of components.
 
-                    JPEG2000_SGcod_ProgressionOrder = this.fileBytes[n];
-                    println("JPEG2000_SGcod_ProgressionOrder =", JPEG2000_SGcod_ProgressionOrder); // Progression order
+                    jpeg2000SGcodProgressionOrder = this.fileBytes[n];
+                    println("jpeg2000SGcodProgressionOrder =", jpeg2000SGcodProgressionOrder); // Progression order
                     n += 1;
 
-                    JPEG2000_SGcod_NumberOfLayers = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("JPEG2000_SGcod_NumberOfLayers =", JPEG2000_SGcod_NumberOfLayers); // Number of layers
+                    jpeg2000SGcodNumberOfLayers = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("jpeg2000SGcodNumberOfLayers =", jpeg2000SGcodNumberOfLayers); // Number of layers
                     n += 2;
 
-                    JPEG2000_SGcod_MultipleComponentTransformation = this.fileBytes[n];
-                    println("JPEG2000_SGcod_MultipleComponentTransformation =", JPEG2000_SGcod_MultipleComponentTransformation); // Multiple component transformation usage
+                    jpeg2000SGcodMultipleComponentTransformation = this.fileBytes[n];
+                    println("jpeg2000SGcodMultipleComponentTransformation =", jpeg2000SGcodMultipleComponentTransformation); // Multiple component transformation usage
                     n += 1;
 
                     // SPcod : Parameters for coding style designated in Scod. The parameters relate to all components.
 
-                    JPEG2000_SPcod_NumberOfDecompositionLevels = this.fileBytes[n];
-                    println("JPEG2000_SPcod_NumberOfDecompositionLevels =", JPEG2000_SPcod_NumberOfDecompositionLevels); // Number of decomposition levels, NL, Zero implies no transformation.
+                    jpeg2000SPcodNumberOfDecompositionLevels = this.fileBytes[n];
+                    println("jpeg2000SPcodNumberOfDecompositionLevels =", jpeg2000SPcodNumberOfDecompositionLevels); // Number of decomposition levels, NL, Zero implies no transformation.
                     n += 1;
 
-                    JPEG2000_SPcod_CodeBlockWidth = this.fileBytes[n];
-                    println("JPEG2000_SPcod_CodeBlockWidth =", JPEG2000_SPcod_CodeBlockWidth); // Code-block width
+                    jpeg2000SPcodCodeBlockWidth = this.fileBytes[n];
+                    println("jpeg2000SPcodCodeBlockWidth =", jpeg2000SPcodCodeBlockWidth); // Code-block width
                     n += 1;
 
-                    JPEG2000_SPcod_CodeBlockHeight = this.fileBytes[n];
-                    println("JPEG2000_SPcod_CodeBlockHeight =", JPEG2000_SPcod_CodeBlockHeight); // Code-block height
+                    jpeg2000SPcodCodeBlockHeight = this.fileBytes[n];
+                    println("jpeg2000SPcodCodeBlockHeight =", jpeg2000SPcodCodeBlockHeight); // Code-block height
                     n += 1;
 
-                    JPEG2000_SPcod_CodeBlockStyle = this.fileBytes[n];
-                    println("JPEG2000_SPcod_CodeBlockStyle =", JPEG2000_SPcod_CodeBlockStyle); // Code-block style
+                    jpeg2000SPcodCodeBlockStyle = this.fileBytes[n];
+                    println("jpeg2000SPcodCodeBlockStyle =", jpeg2000SPcodCodeBlockStyle); // Code-block style
                     n += 1;
 
-                    JPEG2000_SPcod_Transformation = this.fileBytes[n];
-                    println("JPEG2000_SPcod_Transformation =", JPEG2000_SPcod_Transformation); // Wavelet transformation used
+                    jpeg2000SPcodTransformation = this.fileBytes[n];
+                    println("jpeg2000SPcodTransformation =", jpeg2000SPcodTransformation); // Wavelet transformation used
                     n += 1;
 
                     //Ii through In: Precinct sizePrecinct size
@@ -1207,42 +1210,42 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                     println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 5C : Marker Quantization default
                     n += 2;
 
-                    JPEG2000_Lqcd = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Lqcd =", JPEG2000_Lqcd);  // Lqcd : Length of marker segment in bytes (not including the marker)
+                    jpeg2000Lqcd = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Lqcd =", jpeg2000Lqcd);  // Lqcd : Length of marker segment in bytes (not including the marker)
                     n += 2;
 
-                    JPEG2000_Sqcd = this.fileBytes[n];
-                    println("Sqcd =", JPEG2000_Sqcd);  // Sqcd : Quantization style for all components
+                    jpeg2000Sqcd = this.fileBytes[n];
+                    println("Sqcd =", jpeg2000Sqcd);  // Sqcd : Quantization style for all components
                     n += 1;
 
-                    //var /* int */ JPEG2000_SPgcd = function(...);
-                    //println("SPgcd =", JPEG2000_SPcod);  // SPgcd : Quantization step size value for the ith sub-band in the defined order
-                    n += JPEG2000_Lqcd - 3;
+                    //var /* int */ jpeg2000SPgcd = function(...);
+                    //println("SPgcd =", jpeg2000SPcod);  // SPgcd : Quantization step size value for the ith sub-band in the defined order
+                    n += jpeg2000Lqcd - 3;
 
                     println(hex(this.fileBytes[n], 2), hex(this.fileBytes[n + 1], 2));  // FF 90 : Marker Start of tile-part
                     n += 2;
 
-                    JPEG2000_Lsot = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Lsot =", JPEG2000_Lsot);  // Lsot : Length of marker segment in bytes (not including the marker)
+                    jpeg2000Lsot = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Lsot =", jpeg2000Lsot);  // Lsot : Length of marker segment in bytes (not including the marker)
                     n += 2;
 
-                    JPEG2000_Isot = U_NUMx2(this.fileBytes[n], this.fileBytes[n + 1]);
-                    println("Isot =", JPEG2000_Isot);  // Isot : Tile index. This number refers to the tiles in raster order starting at the number 0
+                    jpeg2000Isot = uNumX2(this.fileBytes[n], this.fileBytes[n + 1]);
+                    println("Isot =", jpeg2000Isot);  // Isot : Tile index. This number refers to the tiles in raster order starting at the number 0
                     n += 2;
 
-                    JPEG2000_Psot = U_NUMx4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
-                    println("Psot =", JPEG2000_Psot);  // Psot : Length, in bytes, from the beginning of the first byte of this SOT marker segment of the tile-part to the end of the data of that tile-part. Figure A.16 shows this alignment. Only the last tile-part in the codestream may contain a 0 for Psot. If the Psot is 0, this tile-part is assumed to contain all data until the EOC marker.
+                    jpeg2000Psot = uNumX4(this.fileBytes[n], this.fileBytes[n + 1], this.fileBytes[n + 2], this.fileBytes[n + 3]);
+                    println("Psot =", jpeg2000Psot);  // Psot : Length, in bytes, from the beginning of the first byte of this SOT marker segment of the tile-part to the end of the data of that tile-part. Figure A.16 shows this alignment. Only the last tile-part in the codestream may contain a 0 for Psot. If the Psot is 0, this tile-part is assumed to contain all data until the EOC marker.
                     n += 4;
 
-                    JPEG2000_TPsot = this.fileBytes[n];
-                    println("TPsot =", JPEG2000_TPsot);  // TPsot : Tile-part index. There is a specific order required for decoding tile-parts; this index denotes the order from 0. If there is only one tile-part for a tile, then this value is zero. The tile-parts of this tile shall appear in the codestream in this order, although not necessarily consecutively.
+                    jpeg2000TPsot = this.fileBytes[n];
+                    println("TPsot =", jpeg2000TPsot);  // TPsot : Tile-part index. There is a specific order required for decoding tile-parts; this index denotes the order from 0. If there is only one tile-part for a tile, then this value is zero. The tile-parts of this tile shall appear in the codestream in this order, although not necessarily consecutively.
                     n += 1;
 
-                    JPEG2000_TNsot = this.fileBytes[n];
-                    println("TNsot =", JPEG2000_TNsot);  // TNsot : Number of tile-parts of a tile in the codestream. Two values are allowed: the correct number of tileparts for that tile and zero. A zero value indicates that the number of tile-parts of this tile is not specified in this tile-part.
+                    jpeg2000TNsot = this.fileBytes[n];
+                    println("TNsot =", jpeg2000TNsot);  // TNsot : Number of tile-parts of a tile in the codestream. Two values are allowed: the correct number of tileparts for that tile and zero. A zero value indicates that the number of tile-parts of this tile is not specified in this tile-part.
                     n += 1;
                     printst("\t");
-                    switch (JPEG2000_TNsot) {
+                    switch (jpeg2000TNsot) {
                         case 0: println("Number of tile-parts of this tile in the codestream is not defined in this header"); break;
                         default: println("Number of tile-parts of this tile in the codestream"); break;
                     }
@@ -1253,9 +1256,9 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                     this.printMore(n, 2); // <<<<<<<<<<<<<<<<<<<<
                     n += 2;
 
-                    var /* byte[] */ imageBytes = new Uint8Array(1 + Bitmap_endPointer - Bitmap_beginPointer);
+                    var /* byte[] */ imageBytes = new Uint8Array(1 + BitmapEndPointer - BitmapBeginPointer);
                     for (var i = 0; i < imageBytes.length; i++) {
-                        imageBytes[i] = this.fileBytes[i + Bitmap_beginPointer];
+                        imageBytes[i] = this.fileBytes[i + BitmapBeginPointer];
                     }
                     if (numMembers > 1) {
                         this.DataTitles[memberID] += nf0(memberID, 2);
@@ -1271,15 +1274,15 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
                 (this.DataRepresentationTemplateNumber === 2) || // Grid point data - complex packing
                 (this.DataRepresentationTemplateNumber === 3)) { // Grid point data - complex packing and spatial differencing
-                Bitmap_beginPointer = nPointer + 6;
+                BitmapBeginPointer = nPointer + 6;
 
                 //s = this.getGrib2Section(7); // Section 7: Data Section
 
                 //if (SectionNumbers.length > 1)
                 { // ? to handle the case of no bitmap
-                    Bitmap_endPointer = nPointer;
+                    BitmapEndPointer = nPointer;
 
-                    nPointer = Bitmap_beginPointer;
+                    nPointer = BitmapBeginPointer;
                     var /* int */ b = 0;
 
                     var /* float[] */ data = [];
@@ -1297,7 +1300,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                     nPointer += 1;
                                 }
                             }
-                            data[i] = U_NUMxI(m);
+                            data[i] = uNumXI(m);
                         }
                     }
 
@@ -1311,7 +1314,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                         var /* int */ OverallMinimumOfTheDifferences = 0;
 
                         {
-                            var /* int[] */ m = new Int32Array(8 * ComplexPacking_NumberOfExtraOctetsRequiredInDataSection);
+                            var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                             for (var j = 0; j < m.length; j++) {
                                 m[j] = getNthBit(this.fileBytes[nPointer], b);
 
@@ -1321,12 +1324,12 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                     nPointer += 1;
                                 }
                             }
-                            FirstValues1 = S_NUMxI(m);
+                            FirstValues1 = sNumXI(m);
                             println("FirstValues1 =", FirstValues1);
                         }
 
-                        if (ComplexPacking_OrderOfSpatialDifferencing === 2) { //second order spatial differencing
-                            var /* int[] */ m = new Int32Array(8 * ComplexPacking_NumberOfExtraOctetsRequiredInDataSection);
+                        if (ComplexPackingOrderOfSpatialDifferencing === 2) { //second order spatial differencing
+                            var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                             for (var j = 0; j < m.length; j++) {
                                 m[j] = getNthBit(this.fileBytes[nPointer], b);
                                 b += 1;
@@ -1335,12 +1338,12 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                     nPointer += 1;
                                 }
                             }
-                            FirstValues2 = S_NUMxI(m);
+                            FirstValues2 = sNumXI(m);
                             println("FirstValues2 =", FirstValues2);
                         }
 
                         {
-                            var /* int[] */ m = new Int32Array(8 * ComplexPacking_NumberOfExtraOctetsRequiredInDataSection);
+                            var /* int[] */ m = new Int32Array(8 * ComplexPackingNumberOfExtraOctetsRequiredInDataSection);
                             for (var j = 0; j < m.length; j++) {
                                 m[j] = getNthBit(this.fileBytes[nPointer], b);
                                 b += 1;
@@ -1350,14 +1353,14 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                 }
                             }
 
-                            OverallMinimumOfTheDifferences = S_NUMxI(m);
+                            OverallMinimumOfTheDifferences = sNumXI(m);
                             println("OverallMinimumOfTheDifferences =", OverallMinimumOfTheDifferences);
                         }
 
                         // read the group reference values
-                        var /* int[] */ group_refs = new Int32Array(ComplexPacking_NumberOfGroupsOfDataValues);
+                        var /* int[] */ group_refs = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
-                        for (var i = 0; i < ComplexPacking_NumberOfGroupsOfDataValues; i++) {
+                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
                             var /* int[] */ m = new Int32Array(this.NumberOfBitsUsedForEachPackedValue);
                             for (var j = 0; j < m.length; j++) {
                                 m[j] = getNthBit(this.fileBytes[nPointer], b);
@@ -1367,21 +1370,21 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                     nPointer += 1;
                                 }
                             }
-                            group_refs[i] = U_NUMxI(m);
+                            group_refs[i] = uNumXI(m);
                         }
                         //println(group_refs);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
-                        if (b != 0) {
+                        if (b !== 0) {
                             b = 0;
                             nPointer += 1;
                         }
 
                         // read the group widths
-                        var /* int[] */ group_widths = new Int32Array(ComplexPacking_NumberOfGroupsOfDataValues);
+                        var /* int[] */ group_widths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
-                        for (var i = 0; i < ComplexPacking_NumberOfGroupsOfDataValues; i++) {
-                            var /* int[] */ m = new Int32Array(ComplexPacking_NumberOfBitsUsedForGroupWidths);
+                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                            var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForGroupWidths);
                             for (var j = 0; j < m.length; j++) {
                                 m[j] = getNthBit(this.fileBytes[nPointer], b);
                                 b += 1;
@@ -1390,24 +1393,24 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                     nPointer += 1;
                                 }
                             }
-                            group_widths[i] = U_NUMxI(m);
+                            group_widths[i] = uNumXI(m);
 
-                            group_widths[i] += ComplexPacking_ReferenceForGroupWidths;
+                            group_widths[i] += ComplexPackingReferenceForGroupWidths;
                         }
                         //println(group_widths);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
-                        if (b != 0) {
+                        if (b !== 0) {
                             b = 0;
                             nPointer += 1;
                         }
 
                         // read the group lengths
-                        var /* int[] */ group_lengths = new Int32Array(ComplexPacking_NumberOfGroupsOfDataValues);
+                        var /* int[] */ group_lengths = new Int32Array(ComplexPackingNumberOfGroupsOfDataValues);
 
-                        if (ComplexPacking_GroupSplittingMethodUsed === 1) {
-                            for (var i = 0; i < ComplexPacking_NumberOfGroupsOfDataValues; i++) {
-                                var /* int[] */ m = new Int32Array(ComplexPacking_NumberOfBitsUsedForTheScaledGroupLengths);
+                        if (ComplexPackingGroupSplittingMethodUsed === 1) {
+                            for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                                var /* int[] */ m = new Int32Array(ComplexPackingNumberOfBitsUsedForTheScaledGroupLengths);
                                 for (var j = 0; j < m.length; j++) {
                                     m[j] = getNthBit(this.fileBytes[nPointer], b);
                                     b += 1;
@@ -1416,29 +1419,29 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                         nPointer += 1;
                                     }
                                 }
-                                group_lengths[i] = U_NUMxI(m);
+                                group_lengths[i] = uNumXI(m);
 
-                                group_lengths[i] = group_lengths[i] * ComplexPacking_LengthIncrementForTheGroupLengths + ComplexPacking_ReferenceForGroupLengths;
+                                group_lengths[i] = group_lengths[i] * ComplexPackingLengthIncrementForTheGroupLengths + ComplexPackingReferenceForGroupLengths;
                             }
-                            group_lengths[ComplexPacking_NumberOfGroupsOfDataValues - 1] = ComplexPacking_TrueLengthOfLastGroup;
+                            group_lengths[ComplexPackingNumberOfGroupsOfDataValues - 1] = ComplexPackingTrueLengthOfLastGroup;
                         } else {
-                            println("Error: It does not support this splitting method:", ComplexPacking_GroupSplittingMethodUsed);
+                            println("Error: It does not support this splitting method:", ComplexPackingGroupSplittingMethodUsed);
                         }
                         //println(group_lengths);
 
                         //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
-                        if (b != 0) {
+                        if (b !== 0) {
                             b = 0;
                             nPointer += 1;
                         }
 
                         // check
                         var /* int */ total = 0;
-                        for (var i = 0; i < ComplexPacking_NumberOfGroupsOfDataValues; i++) {
+                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
                             total += group_lengths[i];
                         }
-                        if (total != this.NumberOfDataPoints) {
-                            //if (total != this.Np) {
+                        if (total !== this.NumberOfDataPoints) {
+                            //if (total !== this.Np) {
                             println("Error: Size mismatch!");
                         }
 
@@ -1446,8 +1449,8 @@ module.exports = function /* class */ GRIB2CLASS(options) {
 
                         var /* int */ count = 0;
 
-                        for (var i = 0; i < ComplexPacking_NumberOfGroupsOfDataValues; i++) {
-                            if (group_widths[i] != 0) {
+                        for (var i = 0; i < ComplexPackingNumberOfGroupsOfDataValues; i++) {
+                            if (group_widths[i] !== 0) {
                                 for (var j = 0; j < group_lengths[i]; j++) {
                                     var /* int[] */ m = new Int32Array(group_widths[i]);
                                     for (var k = 0; k < m.length; k++) {
@@ -1459,7 +1462,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                                         }
                                     }
 
-                                    data[count] = U_NUMxI(m) + group_refs[i];
+                                    data[count] = uNumXI(m) + group_refs[i];
 
                                     count += 1;
                                 }
@@ -1475,13 +1478,13 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                         // not sure if this algorithm works fine for complex packing WITHOUT spatial differencing ?????
                         if (this.DataRepresentationTemplateNumber === 3) { // Grid point data - complex packing and spatial differencing
                             // spatial differencing
-                            if (ComplexPacking_OrderOfSpatialDifferencing === 1) { // case of first order
+                            if (ComplexPackingOrderOfSpatialDifferencing === 1) { // case of first order
                                 data[0] = FirstValues1;
                                 for (var i = 1; i < total; i++) {
                                     data[i] += OverallMinimumOfTheDifferences;
                                     data[i] = data[i] + data[i - 1];
                                 }
-                            } else if (ComplexPacking_OrderOfSpatialDifferencing === 2) { // case of second order
+                            } else if (ComplexPackingOrderOfSpatialDifferencing === 2) { // case of second order
                                 data[0] = FirstValues1;
                                 data[1] = FirstValues2;
                                 for (var i = 2; i < total; i++) {
@@ -1531,7 +1534,7 @@ module.exports = function /* class */ GRIB2CLASS(options) {
                     }
 
                     //Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
-                    if (b != 0) {
+                    if (b !== 0) {
                         b = 0;
                         nPointer += 1;
                     }

@@ -10,6 +10,7 @@
     "commonjs": true
   },
   "globals": {
+    "Buffer": true,
     "Promise": true,
     "Float32Array": true,
     "Float64Array": true,
