@@ -1585,7 +1585,7 @@ module.exports = function /* class */ GRIB2CLASS (options) {
 
                         var i, q;
 
-                        if (this.Bitmap_Indicator === 0) { // A bit map applies to this product
+                        if (lThis.Bitmap_Indicator === 0) { // A bit map applies to this product
                             i = -1;
                             for (q = 0; q < lThis.Nx * lThis.Ny; q++) {
                                 if (lThis.NullBitmapFlags[q] === 0) {
