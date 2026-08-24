@@ -1678,7 +1678,7 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         lon = ix * (lon2 - lon1) / float(this.Nx) + lon1;
         lat = iy * (lat2 - lat1) / float(this.Ny) + lat1;
 
-        var t1 = this.SouthLon;
+        var t1 = 180 - this.SouthLon;
         var t2 = -this.SouthLat - 90;
         var t3 = this.Rotation - 90;
 
@@ -1880,7 +1880,7 @@ module.exports = function /* class */ GRIB2CLASS (options) {
         var lat2 = this.La2;
         var lon2 = this.Lo2;
 
-        var t1 = this.SouthLon;
+        var t1 = 90 - this.SouthLon;
         var t2 = -this.SouthLat - 90;
         var t3 = this.Rotation - 90;
 
