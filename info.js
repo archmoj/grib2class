@@ -1269,6 +1269,13 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_15 = function (
         [12, "Reflectivity of Rain(dB)"],
         [13, "Reflectivity of Graupel(dB)"],
         [14, "Reflectivity of Hail(dB)"],
+        [15, "Hybrid Scan Reflectivity(dB)"],
+        [16, "Hybrid Scan Reflectivity Height(m)"],
+        [17, "Precipitation Rate(kg m-2 s-1)"],
+        [18, "Radar Data Quality Index (see Note 2)(Proportion)"],
+        [19, "Radar Data Quality Flag(See Table 4.106)"],
+        [20, "Layer Maximum Precipitation Rate(kg m-2 s-1)"],
+        [192, "Vertically-Integrated Liquid Water(kg m-2)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
