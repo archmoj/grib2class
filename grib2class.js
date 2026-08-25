@@ -798,6 +798,12 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         info.ParameterNumberByProductDisciplineAndParameterCategory_2_3(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 4) { // Fire Weather
                         info.ParameterNumberByProductDisciplineAndParameterCategory_2_4(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 5) { // Glaciers and Inland Ice
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_2_5(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 6) { // Urban Areas
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_2_6(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 7) { // // Thermodynamic Properties
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_2_7(lThis);
                     }
                 } else if (this.DisciplineOfProcessedData === 3) { // Space
                     if (this.CategoryOfParametersByProductDiscipline === 0) { // Image format

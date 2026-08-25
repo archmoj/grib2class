@@ -1960,6 +1960,44 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_2_4 = function (o
     ]);
 };
 
+exports.ParameterNumberByProductDisciplineAndParameterCategory_2_5 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Glacier Cover(Proportion)"],
+        [1, "Glacier Temperature(K)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_2_6 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Urban Cover(Proportion)"],
+        [1, "Road Cover(Proportion)"],
+        [2, "Building Cover(Proportion)"],
+        [3, "Building Height(m)"],
+        [4, "Vertical-to-Horizontal Area Fraction(m2 m-2)"],
+        [5, "Standard Deviation of Building Height(m)"],
+        [6, "Distance Downward from Roof Surface(m)"],
+        [7, "Distance Inward from Outer Wall Surface(m)"],
+        [8, "Distance Downward from Road Surface(m)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_2_7 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Heat Net Flux(W m-2)"],
+        [1, "Latent Heat Net Flux(W m-2)"],
+        [2, "Sensible Heat Net Flux(W m-2)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
 exports.ParameterNumberByProductDisciplineAndParameterCategory_3_0 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
