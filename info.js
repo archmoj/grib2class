@@ -1283,6 +1283,9 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_16 = function (
         [3, "Echo Top(m)"],
         [4, "Reflectivity(dB)"],
         [5, "Composite reflectivity(dB)"],
+        [6, "Precipitation Rate(kg m-2 s-1)"],
+        [7, "Layer Maximum Precipitation Rate(kg m-2 s-1)"],
+        [8, "Layer Maximum Reflectivity(dB)"],
         [192, "Equivalent radar reflectivity factor for rain(m m6 m-3)"],
         [193, "Equivalent radar reflectivity factor for snow(m m6 m-3)"],
         [194, "Equivalent radar reflectivity factor for parameterized convection(m m6 m-3)"],
@@ -1290,6 +1293,7 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_16 = function (
         [196, "Composite reflectivity(dB)"],
         [197, "Echo Top(m)"],
         [198, "Hourly Maximum of Simulated Reflectivity at 1 km AGL(dB)"],
+        [199, "Hourly Maximum of Composite Reflectivity(dB)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
