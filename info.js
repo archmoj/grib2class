@@ -1570,6 +1570,21 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_21 = function (
     ]);
 };
 
+exports.ParameterNumberByProductDisciplineAndParameterCategory_0_22 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Standard Precipitation Index (SPI)(dimensionless)"],
+        [1, "Standardized Precipitation Evapotranspiration Index (SPEI)(dimensionless)"],
+        [2, "Standardized Streamflow Index (SSFI)(dimensionless)"],
+        [3, "Standardized Reservoir Supply Index (SRSI)(dimensionless)"],
+        [4, "Standardized Water-level Index (SWI)(dimensionless)"],
+        [5, "Standardized Snowmelt and Rain Index (SMRI)(dimensionless)"],
+        [6, "Streamflow Drought Index (SDI)(dimensionless)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
 exports.ParameterNumberByProductDisciplineAndParameterCategory_0_190 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
