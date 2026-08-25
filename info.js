@@ -1709,6 +1709,17 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_1_2 = function (o
         [10, "Shape Factor with Respect to Temperature Profile in Thermocline()"],
         [11, "Attenuation Coefficient of Water with Respect to Solar Attenuation Coefficient of Water with Respect to Solar Radiation(m-1)"],
         [12, "Salinity(kg kg-1)"],
+        [13, "Cross Sectional Area of Flow in Channel(m2)"],
+        [14, "Snow Temperature(K)"],
+        [15, "Lake Depth(m)"],
+        [16, "River Depth(m)"],
+        [17, "Floodplain Depth(m)"],
+        [18, "Floodplain Flooded Fraction(Proportion)"],
+        [19, "Floodplain Flooded Area(m2)"],
+        [20, "River Fraction(Proportion)"],
+        [21, "River Area(m2)"],
+        [22, "Fraction of river coverage plus river related flooding(Proportion)"],
+        [23, "Area of river coverage plus river related flooding(m2)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
