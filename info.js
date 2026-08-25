@@ -1686,6 +1686,8 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_1_1 = function (o
         [193, "Probability of Frozen Precipitation(%)"],
         [194, "Probability of precipitation exceeding flash flood guidance values(%)"],
         [195, "Probability of Wetting Rain, exceeding in 0.10 in a given time period(%)"],
+        [196, "Binary Probability of Precipitation Exceeding Average Recurrence Intervals (ARI)(see Code table 4.222)"],
+        [197, "Binary Probability of Precipitation Exceeding Flash Flood Guidance Values(see Code table 4.222)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
