@@ -770,6 +770,8 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         info.ParameterNumberByProductDisciplineAndParameterCategory_0_19(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 20) { // Atmospheric Chemical Constituents
                         info.ParameterNumberByProductDisciplineAndParameterCategory_0_20(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 21) { // Thermodynamic Properties
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_0_21(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 190) { // CCITT IA5 string
                         info.ParameterNumberByProductDisciplineAndParameterCategory_0_190(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 191) { // Miscellaneous

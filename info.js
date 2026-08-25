@@ -1539,6 +1539,37 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_20 = function (
     ]);
 };
 
+exports.ParameterNumberByProductDisciplineAndParameterCategory_0_21 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Column Integrated Potential + Internal Energy(J m-2)"],
+        [1, "Column Integrated Kinetic Energy(J m-2)"],
+        [2, "Column Integrated Total Energy(J m-2)"],
+        [3, "Column Integrated Enthalpy(J m-2)"],
+        [4, "Column Integrated Water Enthalpy(J m-2)"],
+        [5, "Column Integrated Eastward Enthalpy Flux(W m-1)"],
+        [6, "Column Integrated Northward Enthalpy Flux(W m-1)"],
+        [7, "Column Integrated Eastward Potential Energy Flux(W m-1)"],
+        [8, "Column Integrated Northward Potential Energy Flux(W m-1)"],
+        [9, "Column Integrated Eastward Kinetic Energy Flux(W m-1)"],
+        [10, "Column Integrated Northward Kinetic Energy Flux(W m-1)"],
+        [11, "Column Integrated Eastward Total Energy Flux(W m-1)"],
+        [12, "Column Integrated Northward Total Energy Flux(W m-1)"],
+        [13, "Divergence of Column Integrated Enthalpy Flux(W m-1)"],
+        [14, "Divergence of Column Integrated Potential Energy Flux(W m-1)"],
+        [15, "Divergence of Column Integrated Water Potential Energy Flux(W m-1)"],
+        [16, "Divergence of Column Integrated Kinetic Energy Flux(W m-1)"],
+        [17, "Divergence of Column Integrated Total Energy Flux(W m-1)"],
+        [18, "Divergence of Column Integrated Water Enthalpy Flux(W m-1)"],
+        [19, "Column Integrated Eastward Heat Flux(W m-1)"],
+        [20, "Column Integrated Northward Heat Flux(W m-1)"],
+        [21, "Column Integrated Potential+Internal+Latent Energy(J m-2)"],
+        [22, "Eady Growth Rate(day-1)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
 exports.ParameterNumberByProductDisciplineAndParameterCategory_0_190 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
