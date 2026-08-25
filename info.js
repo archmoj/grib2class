@@ -2519,6 +2519,8 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_10_191 = function
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
         [0, "Seconds Prior To Initial Reference Time (Defined In Section 1)(s)"],
         [1, "Meridional Overturning Stream Function(m3 s-1)"],
+        [3, "Days Since Last Observation(d)"],
+        [4, "Barotropic Stream Function(m3 s-1)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
