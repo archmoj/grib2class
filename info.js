@@ -1326,7 +1326,19 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_18 = function (
         [11, "Wet Deposition(Bq m-2)"],
         [12, "Dry Deposition(Bq m-2)"],
         [13, "Total Deposition (Wet + Dry)(Bq m-2)"],
-
+        [14, "Specific Activity Concentration(Bq kg-1)"],
+        [15, "Maximum of Air Concentration in Layer(Bq m-3)"],
+        [16, "Height of Maximum of Air Concentration(m)"],
+        [17, "Column Integrated Air Concentration(Bq m-2)"],
+        [18, "Column Averaged Air Concentration in Layer(Bq m-3)"],
+        [19, "Deposition activity arrival(s)"],
+        [20, "Deposition activity ended(s)"],
+        [21, "Cloud activity arrival(s)"],
+        [22, "Cloud activity ended(s)"],
+        [23, "Effective dose rate(nSv h-1)"],
+        [24, "Thyroid dose rate (adult)(nSv h-1)"],
+        [25, "Gamma dose rate (adult)(nSv h-1)"],
+        [26, "Activity emission(Bq s-1)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
