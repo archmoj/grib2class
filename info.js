@@ -2042,8 +2042,105 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_3_1 = function (o
         [21, "Aerosol Optical Thickness at 0.810 m()"],
         [22, "Aerosol Optical Thickness at 1.640 m()"],
         [23, "Angstrom Coefficient()"],
+        [24, "Cosine of the Solar Zenith Angle(Numeric)"],
+        [27, "Bidirectional Reflecance Factor(Numeric)"],
+        [28, "Brightness Temperature(K)"],
+        [29, "Scaled Radiance(Numeric)"],
+        [30, "Reflectance in 0.4 Micron Channel(%)"],
+        [31, "Cloudy reflectance(%)"],
+        [32, "Clear reflectance(%)"],
+        [98, "Correlation coefficient between MPE rain rates for the co-located IR data and the microwave data rain rates(Numeric)"],
+        [99, "Standard deviation between MPE rain rates for the co-located IR data and the microwave data rain rates(Numeric)"],
         [192, "Scatterometer Estimated U Wind Component(m s-1)"],
         [193, "Scatterometer Estimated V Wind Component(m s-1)"],
+        [194, "Scatterometer Wind Quality()"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_3_2 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Clear Sky Probability(%)"],
+        [1, "Cloud Top Temperature(K)"],
+        [2, "Cloud Top Pressure(Pa)"],
+        [3, "Cloud Type(See Table 4.218)"],
+        [4, "Cloud Phase(See Table 4.218)"],
+        [5, "Cloud Optical Depth(Numeric)"],
+        [6, "Cloud Particle Effective Radius(m)"],
+        [7, "Cloud Liquid Water Path(kg m-2)"],
+        [8, "Cloud Ice Water Path(kg m-2)"],
+        [9, "Cloud Albedo(Numeric)"],
+        [10, "Cloud Emissivity(Numeric)"],
+        [11, "Effective Absorption Optical Depth Ratio(Numeric)"],
+        [30, "Measurement cost(Numeric)"],
+        [31, "Upper layer cloud optical depth(Numeric)"],
+        [32, "Upper layer cloud top pressure(Pa)"],
+        [33, "Upper layer cloud effective radius(m)"],
+        [34, "Error in upper layer cloud optical depth(Numeric)"],
+        [35, "Error in upper layer cloud top pressure(Pa)"],
+        [36, "Error in upper layer cloud effective radius(m)"],
+        [37, "Lower layer cloud optical depth(Numeric)"],
+        [38, "Lower layer cloud top pressure(Pa)"],
+        [39, "Error in lower layer cloud optical depth(Numeric)"],
+        [40, "Error in lower layer cloud top pressure(Pa)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_3_3 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Probability of Encountering Marginal Visual Flight Rules Conditions(%)"],
+        [1, "Probability of Encountering Low Instrument Flight Rules Conditions(%)"],
+        [2, "Probability of Encountering Instrument Flight Rules Conditions(%)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_3_4 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Volcanic Ash Probability(%)"],
+        [1, "Volcanic Ash Cloud Top Temperature(K)"],
+        [2, "Volcanic Ash Cloud Top Pressure(Pa)"],
+        [3, "Volcanic Ash Cloud Top Height(m)"],
+        [4, "Volcanic Ash Cloud Emissity(Numeric)"],
+        [5, "Volcanic Ash Effective Absorption Depth Ratio(Numeric)"],
+        [6, "Volcanic Ash Cloud Optical Depth(Numeric)"],
+        [7, "Volcanic Ash Column Density(kg m-2)"],
+        [8, "Volcanic Ash Particle Effective Radius(m)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_3_5 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Interface Sea Surface Temperature(K)"],
+        [1, "Skin Sea Surface Temperature(K)"],
+        [2, "Sub-Skin Sea Surface Temperature(K)"],
+        [3, "Foundation Sea Surface Temperature(K)"],
+        [4, "Estimated bias between Sea Surface Temperature and Standard(K)"],
+        [5, "Estimated bias Standard Deviation between Sea Surface Temperature and Standard(K)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_3_6 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Global Solar Irradiance(W m-2)"],
+        [1, "Global Solar Exposure(J m-2)"],
+        [2, "Direct Solar Irradiance(W m-2)"],
+        [3, "Direct Solar Exposure(J m-2)"],
+        [4, "Diffuse Solar Irradiance(W m-2)"],
+        [5, "Diffuse Solar Exposure(J m-2)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);

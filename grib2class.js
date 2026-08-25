@@ -805,11 +805,21 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                     } else if (this.CategoryOfParametersByProductDiscipline === 7) { // // Thermodynamic Properties
                         info.ParameterNumberByProductDisciplineAndParameterCategory_2_7(lThis);
                     }
-                } else if (this.DisciplineOfProcessedData === 3) { // Space
+                } else if (this.DisciplineOfProcessedData === 3) { // Satellite Remote Sensing Products (formerly "Space Products")
                     if (this.CategoryOfParametersByProductDiscipline === 0) { // Image format
                         info.ParameterNumberByProductDisciplineAndParameterCategory_3_0(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 1) { // Quantitative
                         info.ParameterNumberByProductDisciplineAndParameterCategory_3_1(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 2) { // Cloud Properties
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_3_2(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 3) { // Flight Rules Conditions
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_3_3(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 4) { // Volcanic Ash
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_3_4(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 5) { // Sea Surface Temperature
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_3_5(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 6) { // Solar Radiation
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_3_6(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 192) { // Forecast Satellite Imagery
                         info.ParameterNumberByProductDisciplineAndParameterCategory_3_192(lThis);
                     }
