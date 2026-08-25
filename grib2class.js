@@ -844,6 +844,8 @@ module.exports = function /* class */ GRIB2CLASS (options) {
                         info.ParameterNumberByProductDisciplineAndParameterCategory_4_8(lThis);
                     } else if (this.CategoryOfParametersByProductDiscipline === 9) { // Ion-Neutral Coupling
                         info.ParameterNumberByProductDisciplineAndParameterCategory_4_9(lThis);
+                    } else if (this.CategoryOfParametersByProductDiscipline === 10) { // Space Weather Indices
+                        info.ParameterNumberByProductDisciplineAndParameterCategory_4_10(lThis);
                     }
                 } else if (this.DisciplineOfProcessedData === 10) { // Oceanographic
                     if (this.CategoryOfParametersByProductDiscipline === 0) { // Waves

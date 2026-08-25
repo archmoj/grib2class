@@ -2201,13 +2201,16 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_4_2 = function (o
         [1, "Electron Density(m-3)"],
         [2, "Proton Density(m-3)"],
         [3, "Ion Density(m-3)"],
-        [4, "Vertical Electron Content(m-2)"],
+        [4, "Vertical Total Electron Content(TECU)"],
         [5, "HF Absorption Frequency(Hz)"],
         [6, "HF Absorption(dB)"],
         [7, "Spread F(m)"],
         [8, "h'F(m)"],
         [9, "Critical Frequency(Hz)"],
-        [10, "Scintillation(Numeric)"],
+        [10, "Maximal Usable Frequency (MUF)(Hz)"],
+        [11, "Peak Height (hm)(m)"],
+        [12, "Peak Density(m-3)"],
+        [13, "Equivalent Slab Thickness (tau)(km)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
@@ -2247,6 +2250,10 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_4_4 = function (o
 exports.ParameterNumberByProductDisciplineAndParameterCategory_4_5 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Amplitude(dB)"],
+        [1, "Phase(rad)"],
+        [2, "Frequency(Hz)"],
+        [3, "Wavelength(m)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
@@ -2270,10 +2277,10 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_4_6 = function (o
 exports.ParameterNumberByProductDisciplineAndParameterCategory_4_7 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
-        [0, "Limb Intensity(m-2 s-1)"],
-        [1, "Disk Intensity(m-2 s-1)"],
-        [2, "Disk Intensity Day(m-2 s-1)"],
-        [3, "Disk Intensity Night(m-2 s-1)"],
+        [0, "Limb Intensity(J m-2 s-1)"],
+        [1, "Disk Intensity(J m-2 s-1)"],
+        [2, "Disk Intensity Day(J m-2 s-1)"],
+        [3, "Disk Intensity Night(J m-2 s-1)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
@@ -2290,6 +2297,7 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_4_8 = function (o
         [5, "White Light Coronagraph Radiance(W sr-1 m-2)"],
         [6, "Heliospheric Radiance(W sr-1 m-2)"],
         [7, "Thematic Mask(Numeric)"],
+        [8, "Solar Induced Chlorophyll Fluorescence(W m-2 sr-1 m-1)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
@@ -2301,6 +2309,22 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_4_9 = function (o
         [0, "Pedersen Conductivity(S m-1)"],
         [1, "Hall Conductivity(S m-1)"],
         [2, "Parallel Conductivity(S m-1)"],
+        [255, "Missing"],
+        [null, nf0(key)]
+    ]);
+};
+
+exports.ParameterNumberByProductDisciplineAndParameterCategory_4_10 = function (obj) {
+    var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
+    obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Scintillation Index (sigma phi)(rad)"],
+        [1, "Scintillation Index S4(Numeric)"],
+        [2, "Rate of Change of TEC Index (ROTI)(TECU/min)"],
+        [3, "Disturbance Ionosphere Index Spatial Gradient (DIXSG)(Numeric)"],
+        [4, "Along Arc TEC Rate (AATR)(TECU/min)"],
+        [5, "Kp(Numeric)"],
+        [6, "Equatorial Disturbance Storm Time Index (Dst)(nT)"],
+        [7, "Auroral Electrojet (AE)(nT)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
