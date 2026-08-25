@@ -1881,6 +1881,14 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_2_3 = function (o
         [20, "Column-Integrated Soil Moisture(kg m-2)"],
         [21, "Soil Ice(kg m-3)"],
         [22, "Column-Integrated Soil Ice(kg m-2)"],
+        [23, "Liquid Water in Snow Pack(kg m-2)"],
+        [24, "Frost Index(kg day-1)"],
+        [25, "Snow Depth at Elevation Bands(kg m-2)"],
+        [26, "Soil Heat Flux(W m-2)"],
+        [27, "Soil Depth(m)"],
+        [28, "Snow Temperature(K)"],
+        [29, "Ice Temperature(K)"],
+        [30, "Soil Wetness Index(Numeric)"],
         [192, "Liquid Volumetric Soil Moisture (non Frozen)(Proportion)"],
         [193, "Number of Soil Layers in Root Zone(non-dim)"],
         [194, "Surface Slope Type(Index)"],
@@ -1893,6 +1901,7 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_2_3 = function (o
         [201, "Average Surface Skin Temperature(K)"],
         [202, "Effective Radiative Skin Temperature(K)"],
         [203, "Field Capacity(Fraction)"],
+        [204, "Soil Moisture Availability In The Top Soil Layer(%)"],
         [255, "Missing"],
         [null, nf0(key)]
     ]);
