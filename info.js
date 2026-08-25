@@ -1298,8 +1298,13 @@ exports.ParameterNumberByProductDisciplineAndParameterCategory_0_16 = function (
 exports.ParameterNumberByProductDisciplineAndParameterCategory_0_17 = function (obj) {
     var key = obj.ParameterNumberByProductDisciplineAndParameterCategory;
     obj.meta.ParameterNumberByProductDisciplineAndParameterCategory = echo(key, [
+        [0, "Lightning Strike Density(m-2 s-1)"],
+        [1, "Lightning Potential Index (LPI)(J kg-1)"],
+        [2, "Cloud-to-Ground Lightning Flash Density(km-2 day-1)"],
+        [3, "Cloud-to-Cloud Lightning Flash Density(km-2 day-1)"],
+        [4, "Total Lightning Flash Density(km-2 day-1)"],
+        [5, "Subgrid-scale Lightning Potential Index(J kg-1)"],
         [192, "Lightning(non-dim)"],
-
         [255, "Missing"],
         [null, nf0(key)]
     ]);
