@@ -31,7 +31,8 @@ function /* int */ sNumX2 (/* int */ m2, /* int */ m1) {
 }
 
 function /* int */ uNumX4 (/* int */ m4, /* int */ m3, /* int */ m2, /* int */ m1) {
-    return ((m4 << 24) + (m3 << 16) + (m2 << 8) + m1);
+    // m4 << 24 overflows into the int32 sign bit when m4 >= 128; >>> 0 reinterprets it as uint32
+    return ((m4 << 24) + (m3 << 16) + (m2 << 8) + m1) >>> 0;
 }
 
 function /* int */ sNumX4 (/* int */ m4, /* int */ m3, /* int */m2, /* int */ m1) {
@@ -137,7 +138,8 @@ function /* float */ IEEE32 (/* String */ s) {
     var /* float */ vSign = Math.pow(-1, parseInt(s.substring(0, 1), 2));
     //println("v_sign", v_sign);
 
-    var /* float */ vExponent = parseInt(s.substring(1, 9), 2) - 127;
+    var /* int */ vExponentBits = parseInt(s.substring(1, 9), 2);
+    var /* float */ vExponent = vExponentBits - 127;
     //println("v_exponent", v_exponent);
 
     var /* float */ vFraction = 0;
@@ -145,8 +147,15 @@ function /* float */ IEEE32 (/* String */ s) {
         var q = parseInt(s.substring(9 + i, 10 + i), 2);
         vFraction += q * Math.pow(2, -(i + 1));
     }
-    vFraction += 1;
     //println("v_fraction", v_fraction);
+
+    if (vExponentBits === 255) return vFraction === 0 ? vSign * Infinity : NaN;
+
+    // a zero exponent field means zero or a subnormal: no implicit leading 1, and the exponent is
+    // pinned at -126 rather than -127
+    if (vExponentBits === 0) return vSign * vFraction * Math.pow(2, -126);
+
+    vFraction += 1;
 
     return vSign * vFraction * Math.pow(2, vExponent);
 }
